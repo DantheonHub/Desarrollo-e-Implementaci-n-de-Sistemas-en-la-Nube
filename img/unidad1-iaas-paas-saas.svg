@@ -1,0 +1,104 @@
+<svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#14606b" flood-opacity="0.18"/>
+    </filter>
+    <style>
+      .cliente { fill: #f4a640; }
+      .proveedor { fill: #2f8f9d; }
+      .col-title { fill: #14606b; font-size: 17px; font-weight: 700; text-anchor: middle; }
+      .row-label { fill: #55707a; font-size: 12.5px; text-anchor: end; }
+      .caption { fill: #55707a; font-size: 11.5px; text-anchor: middle; }
+      .panel { fill: #eaf4f6; stroke: #cfe3e6; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="900" height="460" fill="#ffffff"/>
+  <rect x="15" y="15" width="870" height="430" rx="14" class="panel"/>
+
+  <text x="450" y="45" text-anchor="middle" font-size="15" fill="#14606b" font-weight="700">
+    Reparto de responsabilidades: On-Premise → IaaS → PaaS → SaaS
+  </text>
+
+  <text x="140" y="75" class="col-title">On-Premise</text>
+  <text x="350" y="75" class="col-title">IaaS</text>
+  <text x="560" y="75" class="col-title">PaaS</text>
+  <text x="770" y="75" class="col-title">SaaS</text>
+
+  <g class="row-label">
+    <text x="65" y="112">Aplicación</text>
+    <text x="65" y="142">Datos</text>
+    <text x="65" y="172">Runtime</text>
+    <text x="65" y="202">Middleware</text>
+    <text x="65" y="232">Sist. operativo</text>
+    <text x="65" y="262">Virtualización</text>
+    <text x="65" y="292">Servidores</text>
+    <text x="65" y="322">Almacenamiento</text>
+    <text x="65" y="352">Red</text>
+  </g>
+
+  <g transform="translate(75,95)" filter="url(#soft-shadow)">
+    <clipPath id="clip-onprem"><rect x="0" y="0" width="130" height="270" rx="10"/></clipPath>
+    <g clip-path="url(#clip-onprem)">
+      <rect class="cliente" x="0" y="0" width="130" height="270"/>
+    </g>
+    <g stroke="#ffffff" stroke-width="1.2">
+      <line x1="0" y1="30" x2="130" y2="30"/><line x1="0" y1="60" x2="130" y2="60"/>
+      <line x1="0" y1="90" x2="130" y2="90"/><line x1="0" y1="120" x2="130" y2="120"/>
+      <line x1="0" y1="150" x2="130" y2="150"/><line x1="0" y1="180" x2="130" y2="180"/>
+      <line x1="0" y1="210" x2="130" y2="210"/><line x1="0" y1="240" x2="130" y2="240"/>
+    </g>
+  </g>
+
+  <g transform="translate(285,95)" filter="url(#soft-shadow)">
+    <clipPath id="clip-iaas"><rect x="0" y="0" width="130" height="270" rx="10"/></clipPath>
+    <g clip-path="url(#clip-iaas)">
+      <rect class="cliente" x="0" y="0" width="130" height="150"/>
+      <rect class="proveedor" x="0" y="150" width="130" height="120"/>
+    </g>
+    <g stroke="#ffffff" stroke-width="1.2">
+      <line x1="0" y1="30" x2="130" y2="30"/><line x1="0" y1="60" x2="130" y2="60"/>
+      <line x1="0" y1="90" x2="130" y2="90"/><line x1="0" y1="120" x2="130" y2="120"/>
+      <line x1="0" y1="150" x2="130" y2="150"/><line x1="0" y1="180" x2="130" y2="180"/>
+      <line x1="0" y1="210" x2="130" y2="210"/><line x1="0" y1="240" x2="130" y2="240"/>
+    </g>
+  </g>
+
+  <g transform="translate(495,95)" filter="url(#soft-shadow)">
+    <clipPath id="clip-paas"><rect x="0" y="0" width="130" height="270" rx="10"/></clipPath>
+    <g clip-path="url(#clip-paas)">
+      <rect class="cliente" x="0" y="0" width="130" height="60"/>
+      <rect class="proveedor" x="0" y="60" width="130" height="210"/>
+    </g>
+    <g stroke="#ffffff" stroke-width="1.2">
+      <line x1="0" y1="30" x2="130" y2="30"/><line x1="0" y1="60" x2="130" y2="60"/>
+      <line x1="0" y1="90" x2="130" y2="90"/><line x1="0" y1="120" x2="130" y2="120"/>
+      <line x1="0" y1="150" x2="130" y2="150"/><line x1="0" y1="180" x2="130" y2="180"/>
+      <line x1="0" y1="210" x2="130" y2="210"/><line x1="0" y1="240" x2="130" y2="240"/>
+    </g>
+  </g>
+
+  <g transform="translate(705,95)" filter="url(#soft-shadow)">
+    <clipPath id="clip-saas"><rect x="0" y="0" width="130" height="270" rx="10"/></clipPath>
+    <g clip-path="url(#clip-saas)">
+      <rect class="proveedor" x="0" y="0" width="130" height="270"/>
+    </g>
+    <g stroke="#ffffff" stroke-width="1.2">
+      <line x1="0" y1="30" x2="130" y2="30"/><line x1="0" y1="60" x2="130" y2="60"/>
+      <line x1="0" y1="90" x2="130" y2="90"/><line x1="0" y1="120" x2="130" y2="120"/>
+      <line x1="0" y1="150" x2="130" y2="150"/><line x1="0" y1="180" x2="130" y2="180"/>
+      <line x1="0" y1="210" x2="130" y2="210"/><line x1="0" y1="240" x2="130" y2="240"/>
+    </g>
+  </g>
+
+  <text x="140" y="390" class="caption">Administro todo yo</text>
+  <text x="350" y="390" class="caption">Todo menos servidor / red /</text>
+  <text x="350" y="404" class="caption">almacenamiento / virtualización</text>
+  <text x="560" y="390" class="caption">Solo la app y los datos</text>
+  <text x="770" y="390" class="caption">Nada — solo soy usuario</text>
+
+  <rect x="270" y="425" width="18" height="18" rx="3" class="cliente"/>
+  <text x="294" y="439" font-size="12.5" fill="#333">Responsabilidad del cliente</text>
+  <rect x="480" y="425" width="18" height="18" rx="3" class="proveedor"/>
+  <text x="504" y="439" font-size="12.5" fill="#333">Responsabilidad del proveedor</text>
+</svg>

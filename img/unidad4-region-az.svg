@@ -1,0 +1,54 @@
+<svg viewBox="0 0 820 420" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .region { fill: #eaf4f6; stroke: #2f8f9d; stroke-width: 2; stroke-dasharray: 6 4; }
+      .az { fill: #ffffff; stroke: #2f8f9d; stroke-width: 1.5; }
+      .dc { fill: #cfe8ec; stroke: #2f8f9d; stroke-width: 1; }
+      .label-region { fill: #14606b; font-size: 15px; font-weight: 700; }
+      .label-az { fill: #14606b; font-size: 13px; font-weight: 600; }
+      .label-dc { fill: #14606b; font-size: 11px; text-anchor: middle; }
+      .fiber { stroke: #f4a640; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="820" height="420" fill="#ffffff"/>
+
+  <!-- Region container -->
+  <rect x="20" y="20" width="780" height="380" rx="12" class="region"/>
+  <text x="40" y="48" class="label-region">Región AWS (ej: sa-east-1)</text>
+
+  <!-- AZ 1 -->
+  <rect x="50" y="70" width="220" height="300" rx="8" class="az"/>
+  <text x="65" y="95" class="label-az">Zona de disponibilidad A</text>
+  <rect x="70" y="110" width="80" height="55" rx="4" class="dc"/>
+  <text x="110" y="142" class="label-dc">Centro de<tspan x="110" dy="14">datos</tspan></text>
+  <rect x="170" y="110" width="80" height="55" rx="4" class="dc"/>
+  <text x="210" y="142" class="label-dc">Centro de<tspan x="210" dy="14">datos</tspan></text>
+  <rect x="70" y="180" width="80" height="55" rx="4" class="dc"/>
+  <text x="110" y="212" class="label-dc">Centro de<tspan x="110" dy="14">datos</tspan></text>
+
+  <!-- AZ 2 -->
+  <rect x="300" y="70" width="220" height="300" rx="8" class="az"/>
+  <text x="315" y="95" class="label-az">Zona de disponibilidad B</text>
+  <rect x="320" y="110" width="80" height="55" rx="4" class="dc"/>
+  <text x="360" y="142" class="label-dc">Centro de<tspan x="360" dy="14">datos</tspan></text>
+  <rect x="420" y="110" width="80" height="55" rx="4" class="dc"/>
+  <text x="460" y="142" class="label-dc">Centro de<tspan x="460" dy="14">datos</tspan></text>
+
+  <!-- AZ 3 -->
+  <rect x="550" y="70" width="220" height="300" rx="8" class="az"/>
+  <text x="565" y="95" class="label-az">Zona de disponibilidad C</text>
+  <rect x="570" y="110" width="80" height="55" rx="4" class="dc"/>
+  <text x="610" y="142" class="label-dc">Centro de<tspan x="610" dy="14">datos</tspan></text>
+  <rect x="670" y="110" width="80" height="55" rx="4" class="dc"/>
+  <text x="710" y="142" class="label-dc">Centro de<tspan x="710" dy="14">datos</tspan></text>
+
+  <!-- fiber links between AZs -->
+  <path d="M 270 220 C 285 220, 285 220, 300 220" class="fiber"/>
+  <path d="M 520 220 C 535 220, 535 220, 550 220" class="fiber"/>
+  <text x="285" y="245" text-anchor="middle" font-size="10" fill="#8a5a00">red privada</text>
+  <text x="535" y="245" text-anchor="middle" font-size="10" fill="#8a5a00">de alta velocidad</text>
+
+  <!-- footer notes -->
+  <text x="40" y="392" font-size="12" fill="#555">Cada zona de disponibilidad: aislamiento físico, energía/refrigeración propia, uno o más centros de datos.</text>
+</svg>
