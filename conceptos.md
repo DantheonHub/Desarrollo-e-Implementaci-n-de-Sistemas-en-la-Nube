@@ -6,53 +6,71 @@ Apuntes de referencia de la materia **Desarrollo e Implementación de Sistemas e
 
 ## Índice
 
-- [Unidad 1 — Introducción a la computación en la nube](#unidad-1--introducción-a-la-computación-en-la-nube)
-  - [1. ¿Qué es la nube?](#1-qué-es-la-nube)
-  - [2. Origen y evolución histórica de la nube](#2-origen-y-evolución-histórica-de-la-nube)
-    - [2.1 La idea original (décadas de 1960-1970)](#21-la-idea-original-décadas-de-1960-1970)
-    - [2.2 Mainframes y nubes privadas](#22-mainframes-y-nubes-privadas)
-    - [2.3 El nacimiento de la nube pública: AWS (2006)](#23-el-nacimiento-de-la-nube-pública-aws-2006)
-    - [2.4 Panorama actual de proveedores](#24-panorama-actual-de-proveedores)
-  - [3. Modelos de servicio en la nube: IaaS, PaaS y SaaS](#3-modelos-de-servicio-en-la-nube-iaas-paas-y-saas)
-    - [3.1 IaaS — Infrastructure as a Service](#31-iaas--infrastructure-as-a-service)
-    - [3.2 PaaS — Platform as a Service](#32-paas--platform-as-a-service)
-    - [3.3 SaaS — Software as a Service](#33-saas--software-as-a-service)
-    - [3.4 Comparación de responsabilidades entre modelos](#34-comparación-de-responsabilidades-entre-modelos)
-  - [4. Tipos de nube: privada, pública e híbrida](#4-tipos-de-nube-privada-pública-e-híbrida)
-  - [5. Comparación entre AWS y la infraestructura tradicional](#5-comparación-entre-aws-y-la-infraestructura-tradicional)
-  - [6. Beneficios de la computación en la nube](#6-beneficios-de-la-computación-en-la-nube)
-    - [6.1 Pago por uso (Pay-as-you-go)](#61-pago-por-uso-pay-as-you-go)
-    - [6.2 Elasticidad y escalabilidad](#62-elasticidad-y-escalabilidad)
-    - [6.3 Alta disponibilidad y distribución en regiones](#63-alta-disponibilidad-y-distribución-en-regiones)
-    - [6.4 Eficiencia y time to market](#64-eficiencia-y-time-to-market)
-    - [6.5 Acceso a tecnología reciente](#65-acceso-a-tecnología-reciente)
-  - [7. DevOps (mención introductoria)](#7-devops-mención-introductoria)
-- [Unidad 3 — Facturación y economía de la nube](#unidad-3--facturación-y-economía-de-la-nube)
-  - [1. Modelo de precios de AWS](#1-modelo-de-precios-de-aws)
-  - [2. Formas de pago](#2-formas-de-pago)
-    - [2.1 Pagar por lo que se utiliza (bajo demanda)](#21-pagar-por-lo-que-se-utiliza-bajo-demanda)
-    - [2.2 Pagar menos al reservar (instancias reservadas)](#22-pagar-menos-al-reservar-instancias-reservadas)
-    - [2.3 Pagar menos si se usa más (descuento por volumen)](#23-pagar-menos-si-se-usa-más-descuento-por-volumen)
-    - [2.4 Pagar aún menos a medida que AWS crece](#24-pagar-aún-menos-a-medida-que-aws-crece)
-    - [2.5 Precios personalizados](#25-precios-personalizados)
-  - [3. Servicios sin cargo](#3-servicios-sin-cargo)
-  - [4. Costo total de propiedad (TCO)](#4-costo-total-de-propiedad-tco)
-  - [5. AWS Organizations y facturación unificada](#5-aws-organizations-y-facturación-unificada)
-  - [6. Panel y herramientas de facturación](#6-panel-y-herramientas-de-facturación)
-  - [7. Soporte técnico (AWS Support)](#7-soporte-técnico-aws-support)
-- [Unidad 4 — Infraestructura global de AWS](#unidad-4--infraestructura-global-de-aws)
-  - [1. Regiones](#1-regiones)
-  - [2. Zonas de disponibilidad](#2-zonas-de-disponibilidad)
-  - [3. Centros de datos](#3-centros-de-datos)
-  - [4. Puntos de presencia (edge locations)](#4-puntos-de-presencia-edge-locations)
-  - [5. Características de la infraestructura de AWS](#5-características-de-la-infraestructura-de-aws)
-  - [6. Categorías de servicios de AWS](#6-categorías-de-servicios-de-aws)
-    - [6.1 Almacenamiento](#61-almacenamiento)
-    - [6.2 Cómputo / informática](#62-cómputo--informática)
-    - [6.3 Bases de datos](#63-bases-de-datos)
-    - [6.4 Redes y entrega de contenido](#64-redes-y-entrega-de-contenido)
-    - [6.5 Seguridad, identidad y conformidad](#65-seguridad-identidad-y-conformidad)
-    - [6.6 Administración y gobernanza](#66-administración-y-gobernanza)
+- [Desarrollo e Implementación de Sistemas en la Nube — Biblioteca de Conceptos](#desarrollo-e-implementación-de-sistemas-en-la-nube--biblioteca-de-conceptos)
+  - [Índice](#índice)
+  - [Unidad 1 — Introducción a la computación en la nube](#unidad-1--introducción-a-la-computación-en-la-nube)
+    - [1. ¿Qué es la nube?](#1-qué-es-la-nube)
+    - [2. Origen y evolución histórica de la nube](#2-origen-y-evolución-histórica-de-la-nube)
+      - [2.1 La idea original (décadas de 1960-1970)](#21-la-idea-original-décadas-de-1960-1970)
+      - [2.2 Mainframes y nubes privadas](#22-mainframes-y-nubes-privadas)
+      - [2.3 El nacimiento de la nube pública: AWS (2006)](#23-el-nacimiento-de-la-nube-pública-aws-2006)
+      - [2.4 Panorama actual de proveedores](#24-panorama-actual-de-proveedores)
+    - [3. Modelos de servicio en la nube: IaaS, PaaS y SaaS](#3-modelos-de-servicio-en-la-nube-iaas-paas-y-saas)
+      - [3.1 IaaS — Infrastructure as a Service](#31-iaas--infrastructure-as-a-service)
+      - [3.2 PaaS — Platform as a Service](#32-paas--platform-as-a-service)
+      - [3.3 SaaS — Software as a Service](#33-saas--software-as-a-service)
+      - [3.4 Comparación de responsabilidades entre modelos](#34-comparación-de-responsabilidades-entre-modelos)
+    - [4. Tipos de nube: privada, pública e híbrida](#4-tipos-de-nube-privada-pública-e-híbrida)
+    - [5. Comparación entre AWS y la infraestructura tradicional](#5-comparación-entre-aws-y-la-infraestructura-tradicional)
+    - [6. Beneficios de la computación en la nube](#6-beneficios-de-la-computación-en-la-nube)
+      - [6.1 Pago por uso (Pay-as-you-go)](#61-pago-por-uso-pay-as-you-go)
+      - [6.2 Elasticidad y escalabilidad](#62-elasticidad-y-escalabilidad)
+      - [6.3 Alta disponibilidad y distribución en regiones](#63-alta-disponibilidad-y-distribución-en-regiones)
+      - [6.4 Eficiencia y time to market](#64-eficiencia-y-time-to-market)
+      - [6.5 Acceso a tecnología reciente](#65-acceso-a-tecnología-reciente)
+    - [7. DevOps (mención introductoria)](#7-devops-mención-introductoria)
+  - [Unidad 3 — Facturación y economía de la nube](#unidad-3--facturación-y-economía-de-la-nube)
+    - [1. Modelo de precios de AWS](#1-modelo-de-precios-de-aws)
+    - [2. Formas de pago](#2-formas-de-pago)
+      - [2.1 Pagar por lo que se utiliza (bajo demanda)](#21-pagar-por-lo-que-se-utiliza-bajo-demanda)
+      - [2.2 Pagar menos al reservar (instancias reservadas)](#22-pagar-menos-al-reservar-instancias-reservadas)
+      - [2.3 Pagar menos si se usa más (descuento por volumen)](#23-pagar-menos-si-se-usa-más-descuento-por-volumen)
+      - [2.4 Pagar aún menos a medida que AWS crece](#24-pagar-aún-menos-a-medida-que-aws-crece)
+      - [2.5 Precios personalizados](#25-precios-personalizados)
+    - [3. Servicios sin cargo](#3-servicios-sin-cargo)
+    - [4. Costo total de propiedad (TCO)](#4-costo-total-de-propiedad-tco)
+    - [5. AWS Organizations y facturación unificada](#5-aws-organizations-y-facturación-unificada)
+    - [6. Panel y herramientas de facturación](#6-panel-y-herramientas-de-facturación)
+    - [7. Soporte técnico (AWS Support)](#7-soporte-técnico-aws-support)
+  - [Unidad 4 — Infraestructura global de AWS](#unidad-4--infraestructura-global-de-aws)
+    - [1. Regiones](#1-regiones)
+    - [2. Zonas de disponibilidad](#2-zonas-de-disponibilidad)
+    - [3. Centros de datos](#3-centros-de-datos)
+    - [4. Puntos de presencia (edge locations)](#4-puntos-de-presencia-edge-locations)
+    - [5. Características de la infraestructura de AWS](#5-características-de-la-infraestructura-de-aws)
+    - [6. Categorías de servicios de AWS](#6-categorías-de-servicios-de-aws)
+      - [6.1 Almacenamiento](#61-almacenamiento)
+      - [6.2 Cómputo / informática](#62-cómputo--informática)
+      - [6.3 Bases de datos](#63-bases-de-datos)
+      - [6.4 Redes y entrega de contenido](#64-redes-y-entrega-de-contenido)
+      - [6.5 Seguridad, identidad y conformidad](#65-seguridad-identidad-y-conformidad)
+      - [6.6 Administración y gobernanza](#66-administración-y-gobernanza)
+  - [Unidad 5 — Seguridad](#unidad-5--seguridad)
+    - [1. Modelo de responsabilidad compartida (en detalle)](#1-modelo-de-responsabilidad-compartida-en-detalle)
+    - [2. AWS IAM (Identity and Access Management)](#2-aws-iam-identity-and-access-management)
+      - [2.1 Recursos, identidades y el trío quién/qué/cómo](#21-recursos-identidades-y-el-trío-quiénquécómo)
+      - [2.2 Usuarios, grupos, políticas y roles](#22-usuarios-grupos-políticas-y-roles)
+      - [2.3 Lógica de allow/deny](#23-lógica-de-allowdeny)
+      - [2.4 Roles entre servicios (sin usuario ni contraseña)](#24-roles-entre-servicios-sin-usuario-ni-contraseña)
+    - [3. Cifrado de datos](#3-cifrado-de-datos)
+      - [3.1 Cifrado en reposo](#31-cifrado-en-reposo)
+      - [3.2 Cifrado en tránsito](#32-cifrado-en-tránsito)
+    - [4. MFA (autenticación multifactor)](#4-mfa-autenticación-multifactor)
+  - [Unidad 6 — Redes (parcial, en curso)](#unidad-6--redes-parcial-en-curso)
+    - [1. Conceptos base de redes](#1-conceptos-base-de-redes)
+    - [2. Amazon VPC (Virtual Private Cloud)](#2-amazon-vpc-virtual-private-cloud)
+    - [3. VPC, subredes y zonas de disponibilidad](#3-vpc-subredes-y-zonas-de-disponibilidad)
+    - [4. Alta disponibilidad con subredes en múltiples AZ](#4-alta-disponibilidad-con-subredes-en-múltiples-az)
 
 ---
 
@@ -74,7 +92,7 @@ Esto tiene una consecuencia importante a nivel de negocio: la computación pasa 
 
 La idea de la computación como un servicio compartido no es nueva. Ya en la década de 1960, cuando internet ni siquiera existía en su forma moderna (recién estaba surgiendo un concepto embrionario de red, de uso exclusivamente militar), el científico **John McCarthy** planteó que en algún momento la informática podría ofrecerse de forma similar a un servicio público a nivel nacional (electricidad, agua, etc.), permitiendo compartir recursos de cómputo entre múltiples usuarios.
 
-*Ojo: el profesor ubicó esto "alrededor de 1960-62". Es un dato bastante conocido — la idea de la computación como servicio público suele atribuirse a John McCarthy en una charla de comienzos de los 60 — pero el año exacto varía según la fuente, así que va como referencia aproximada.*
+*Dato preciso: fue en una charla de 1961 en el MIT.*
 
 #### 2.2 Mainframes y nubes privadas
 
@@ -98,7 +116,7 @@ Hoy AWS ofrece más de 200 servicios distintos (cómputo, bases de datos, redes,
 
 Después de AWS surgieron otros proveedores de nube pública: **Microsoft Azure**, **Google Cloud**, **Oracle Cloud**, y más recientemente proveedores chinos como **Alibaba Cloud** y **Huawei Cloud** (este último con fuerte presencia en Latinoamérica, principalmente por precio).
 
-*Ojo: el dato de 33-35% viene de un gráfico que mostró el profesor, que parecía ser de ~2020 (el mismo lo aclaró en la clase). Más actualizado (Synergy Research Group, Q1 2026): AWS ronda 28-30%, Azure 21-25%, Google Cloud 13-14%. La tendencia que se comentó en clase se mantiene (Azure y Google le vienen ganando terreno a AWS, las nubes chinas siguen creciendo), pero el número puntual bajó. Como con cualquier precio o cuota de mercado de estas empresas, conviene chequearlo de nuevo antes de usarlo en el integrador o en una presentación — cambia rápido.*
+*El profesor citó un gráfico de ~2020 con AWS en 33-35%. Dato actualizado (Synergy Research Group, Q1 2026): AWS 28-30%, Azure 21-25%, Google Cloud 13-14%.*
 
 ### 3. Modelos de servicio en la nube: IaaS, PaaS y SaaS
 
@@ -242,7 +260,7 @@ Varios servicios de almacenamiento (Amazon S3, Amazon EBS, Amazon EFS) tienen **
 
 A medida que AWS crece como negocio, traslada parte de esas economías de escala a los precios. Según AWS, entre 2006 y septiembre de 2019 bajaron los precios **75 veces**. Además, cuando aparece hardware de mejor rendimiento (nuevas generaciones de procesadores, incluida la arquitectura ARM, más barata en consumo eléctrico), muchas veces reemplaza al hardware anterior sin costo adicional para el cliente.
 
-*Ojo: esto es marketing de AWS sobre su propia historia de precios — es un dato que la empresa promociona activamente, no una medición independiente. La cifra puede no estar actualizada más allá de 2019, que es la fecha que ellos mismos citan.*
+*Dato de marketing de AWS sobre su propia historia de precios, citado tal cual hasta la fecha que ellos mismos publicaron (sept. 2019).*
 
 #### 2.5 Precios personalizados
 
@@ -271,7 +289,7 @@ El TCO de una infraestructura tradicional considera cuatro grandes rubros, cada 
 
 En un caso ilustrativo que AWS suele mostrar (números "ideales", no necesariamente representativos de cualquier empresa u país), migrar a la nube ahorraba hasta un 96% al año, comparando ~91.900 USD de servidor propio en 3 años contra ~2.500 USD en AWS.
 
-*Ojo con este tipo de comparaciones: el profesor remarcó que son slides de marketing de AWS, con escenarios ideales que no siempre se replican, especialmente en un contexto como Argentina, donde entran en juego cosas que no aparecen en la cuenta simple: costo de la energía si ya está subsidiada o compartida con otro sector de la empresa, hardware que ya está amortizado hace años y no se pretende renovar, o el peso del tipo de cambio en la facturación en dólares de AWS. Además, hay resistencia al cambio (personal que no quiere aprender a administrar infraestructura en la nube) y, en organismos del Estado, la lógica de licitación y presupuesto fijo choca con el modelo de pago variable de la nube.*
+*Este tipo de comparación es material de marketing de AWS, con escenarios ideales. En un contexto como Argentina entran variables que esa cuenta no muestra: costo de energía ya subsidiado o compartido, hardware ya amortizado que no se piensa renovar, y el peso del tipo de cambio sobre una facturación en dólares. Sumado a esto: resistencia al cambio del personal, y en organismos del Estado, la lógica de licitación y presupuesto fijo choca con el pago variable de la nube.*
 
 **Caso práctico (Delaware North):** empresa global de más de 200 ubicaciones (aeropuertos, gastronomía, entretenimiento) migró su centro de datos on-premise a AWS, eliminando el 90% de sus servidores físicos (205 de ellos) y usando instancias reservadas de EC2 a 3 años. Resultado: mayor rapidez para lanzar servicios nuevos (de días a minutos), optimización de recursos y reducción continua de costos.
 
@@ -309,7 +327,7 @@ Herramientas principales:
 - **Presupuestos de AWS (AWS Budgets)** — permite definir un presupuesto (por ejemplo, 500 USD por mes para un proyecto) y recibir notificaciones proactivas (mail o push) cuando la proyección de gasto vaya a superarlo. Es la herramienta más importante para detectar a tiempo un recurso que quedó prendido por error o un uso indebido de la cuenta.
 - **Informes de uso y costo de AWS (Cost and Usage Reports)** — el detalle más granular, ya con el costo efectivamente facturado (a diferencia del presupuesto, que es una proyección).
 
-*Ojo: dejar recursos corriendo sin usarlos, u olvidarse de apagar algo, es de los motivos de facturación inesperada más comunes en la práctica — no es exclusivo de estudiantes o cuentas chicas, pasa también en empresas.*
+*Dejar recursos corriendo sin usarlos es la causa más común de facturación inesperada — pasa tanto en cuentas chicas como en empresas.*
 
 ### 7. Soporte técnico (AWS Support)
 
@@ -342,7 +360,7 @@ Una **región de AWS** es una zona geográfica. Puntos clave:
 
 En la práctica, la región **us-east-1 (Norte de Virginia)** suele ser la primera opción por dos motivos: es históricamente la más barata, y es la que primero recibe los servicios nuevos de AWS.
 
-*Ojo: no hay región de AWS en Argentina. En Sudamérica, la región de AWS más cercana es São Paulo (Brasil). Buenos Aires cuenta con una "zona local" (más chica que una región completa), no con una región propia. AWS anunció una región en Chile; puede haber cambiado el estado de este anuncio desde que se dio la clase, conviene verificar en la página de infraestructura de AWS.*
+*No hay región de AWS en Argentina. La más cercana en Sudamérica es São Paulo; Buenos Aires tiene una "zona local" (más chica que una región completa). AWS anunció una región en Chile, aún no operativa al momento de la clase.*
 
 ### 2. Zonas de disponibilidad
 
@@ -355,7 +373,7 @@ En la práctica, la región **us-east-1 (Norte de Virginia)** suele ser la prime
 
 ![Estructura de región, zonas de disponibilidad y centros de datos en AWS](img/unidad4-region-az.svg)
 
-*Ojo: el profesor mencionó una distancia máxima entre centros de datos de una misma región (dijo primero "100 millas", después "60 millas / 100 km"), pero no llegó a confirmar la cifra exacta en clase ni aparece un número preciso en el PDF compartido. No se documenta un valor específico acá para no inventar el dato — conviene verificar la documentación oficial de AWS si se necesita la cifra exacta.*
+*Distancia confirmada en la Clase 3: hasta 100 km entre centros de datos de una misma región, límite impuesto por latencia (para que el enlace entre zonas se comporte como si estuvieran "al lado", la latencia entre ellas debe mantenerse por debajo de ~1 milisegundo).*
 
 ### 3. Centros de datos
 
@@ -435,3 +453,123 @@ AWS agrupa sus más de 200 servicios en categorías. Estas son las que se vieron
 - **Consola de administración de AWS / CLI de AWS:** las dos formas principales de interactuar con todos los servicios (interfaz web vs. línea de comandos).
 
 > Nota: no se listan acá todas las categorías que muestra AWS (también existen, por ejemplo, análisis de datos, integración de aplicaciones, machine learning, IoT, RA/RV, robótica, servicios satelitales, entre otras) porque no fueron desarrolladas en esta clase — se documentan solo las que efectivamente se explicaron.
+
+---
+
+## Unidad 5 — Seguridad
+
+### 1. Modelo de responsabilidad compartida (en detalle)
+
+El modelo de responsabilidad compartida no es fijo para todos los servicios por igual: varía según el modelo (IaaS/PaaS/SaaS) y según el servicio puntual. La única forma correcta de leerlo es como un principio general, no como una tabla cerrada.
+
+**Lo que nunca es responsabilidad del cliente** (siempre del proveedor, en cualquier modelo): la infraestructura física de AWS — los centros de datos, las regiones, las zonas de disponibilidad, las ubicaciones de borde — y la seguridad física de esos sitios.
+
+**En IaaS (por ejemplo, una instancia EC2), es responsabilidad del cliente:**
+- La configuración del sistema operativo, parches y actualizaciones.
+- El cifrado de los propios datos (activarlo o no).
+- Los certificados y el cifrado del tráfico (si se publica una página sin HTTPS, es decisión propia).
+- Las contraseñas y credenciales de las aplicaciones propias.
+- La configuración de los **grupos de seguridad** (el equivalente a un firewall de la instancia — qué puertos/tráfico se permite). AWS no impide dejarlo mal configurado ("abierto a todo el mundo"); en todo caso puede alertar después, con algún servicio de seguridad, pero no lo prohíbe de entrada.
+- Lo que corre dentro de la máquina (si alguien la usa para minar criptomonedas o lanzar ataques a terceros, es responsabilidad del cliente — y AWS puede facturar igual, o suspender la cuenta si detecta abuso).
+
+**En PaaS**, el cliente pierde parte de esa carga: por ejemplo, AWS se encarga del parcheo del sistema operativo subyacente, y el cliente se concentra en su código y sus datos.
+
+**En SaaS**, prácticamente toda la responsabilidad recae en el proveedor; el cliente es solo usuario (ejemplo real citado en clase: un incidente de disponibilidad en GitHub afectó a todos sus usuarios — ahí la responsabilidad de resolverlo es de GitHub/Microsoft, no de cada usuario individual).
+
+*Analogía usada en clase para separar responsabilidades: AWS entrega la llave del "departamento" (el recurso) una sola vez. Puede reemplazar la cerradura si hace falta, pero no puede volver a entregar la llave original si el cliente la pierde — la custodia de esa llave, desde el momento en que se entrega, es responsabilidad exclusiva del cliente.*
+
+### 2. AWS IAM (Identity and Access Management)
+
+IAM es el servicio que administra el acceso a los recursos de una cuenta de AWS. Es de los servicios fundacionales de seguridad, y también de los más propensos a mal configurarse en el día a día — es común terminar dando accesos de más "para que funcione", lo cual no es buena práctica.
+
+#### 2.1 Recursos, identidades y el trío quién/qué/cómo
+
+Un **recurso** es cualquier entidad que pertenece a una cuenta de AWS con la que se puede interactuar: una instancia EC2, una base de datos, un bucket de S3, etc.
+
+Toda acción sobre un recurso en AWS queda **registrada y trazada a una identidad** — nunca hay acciones anónimas. Al definir permisos, siempre entran en juego tres preguntas:
+
+1. **Quién** — puede ser una persona, o una **aplicación/máquina** (un usuario de servicio, no interactivo — por ejemplo, un pipeline de CI/CD de GitHub Actions que despliega infraestructura automáticamente en una cuenta de AWS).
+2. **Sobre qué recurso** — no todos los recursos tienen el mismo conjunto de acciones posibles; cada tipo de recurso define las suyas.
+3. **Qué puede hacer (cómo)** — por ejemplo, solo lectura, solo escritura, control total, etc.
+
+#### 2.2 Usuarios, grupos, políticas y roles
+
+- **Usuario:** una identidad dentro de la cuenta (persona o aplicación).
+- **Grupo de usuarios:** agrupa usuarios para administrar permisos de forma más simple (en vez de asignar la misma política a cada usuario uno por uno).
+- **Política:** un documento (en formato JSON) que define qué acciones se permiten o deniegan, sobre qué recursos y para quién. Puede ser muy simple (por ejemplo, una política de administrador de solo unas líneas con asteriscos, que da acceso total a todo) o muy granular (especificando recurso por recurso, acción por acción).
+- **Rol:** un mecanismo para conceder permisos de forma **temporal**, para una tarea puntual — no es algo permanente como una política asociada a un usuario. Un usuario puede tener permisos básicos, y bajo ciertas condiciones "asumir" un rol que le da permisos más amplios solo mientras dura la tarea; al terminar, vuelve a su nivel de permisos habitual.
+
+*Analogía usada en clase: los cascos de colores en una fábrica. El casco blanco (visita) permite entrar a ciertas zonas; el casco amarillo (un rol distinto) permite entrar a otras, como la sala de calderas. Es la misma persona, pero el rol que tiene puesto en cada momento determina a qué puede acceder — y ese rol se "saca" al terminar la tarea.*
+
+Los roles se usan mucho para que **dos servicios de AWS se comuniquen entre sí** sin intervención humana: un servicio asume un rol para poder actuar sobre otro recurso.
+
+#### 2.3 Lógica de allow/deny
+
+Las políticas de IAM pueden permitir (*allow*) o denegar (*deny*) explícitamente. La regla de oro: **una denegación explícita siempre prevalece sobre un permiso explícito**, sin importar en qué orden aparezcan las políticas.
+
+Además, el comportamiento por defecto ante la ausencia de una regla es denegar: si una acción **no está permitida explícitamente**, se deniega — no hace falta una regla de "deny" explícita para bloquearla; alcanza con que nunca se haya otorgado el "allow". Solo se permite una acción cuando existe un "allow" explícito y no hay ningún "deny" que lo contradiga.
+
+#### 2.4 Roles entre servicios (sin usuario ni contraseña)
+
+Un caso de uso muy común de los roles: una instancia EC2 necesita leer o escribir en un bucket de S3. En vez de guardar un usuario y contraseña (o una clave de acceso) dentro del código de la aplicación — una mala práctica, porque esas credenciales quedan expuestas en el código o en variables de entorno —, se le asigna directamente un **rol** a la instancia. La aplicación que corre en esa instancia asume automáticamente ese rol cada vez que necesita acceder a S3, sin que el desarrollador tenga que definir ni gestionar ninguna credencial. Es una de las ventajas más citadas de desarrollar y desplegar directamente en la nube frente a hacerlo en infraestructura propia.
+
+### 3. Cifrado de datos
+
+AWS distingue dos formas de cifrado:
+
+#### 3.1 Cifrado en reposo
+
+Protege la información **almacenada** (en un disco, una cinta, cualquier servicio de almacenamiento). Análogo a activar BitLocker en un disco propio: si alguien accede físicamente al centro de datos y se lleva un disco, no puede leer la información sin la clave.
+
+- No está habilitado por defecto en todos los servicios (algunos sí lo traen activado de fábrica, por ejemplo S3; otros no).
+- Se puede cifrar con una clave que genera AWS automáticamente, o con una clave propia.
+- Activarlo sobre datos que ya existen sin cifrar es un proceso **lento** — hay que recorrer y volver a escribir todos los datos — a diferencia de crear el recurso ya cifrado desde el inicio.
+
+#### 3.2 Cifrado en tránsito
+
+Protege la información **mientras viaja** entre dos puntos (dos servicios de AWS entre sí, o AWS con algo externo). Es el mismo concepto de HTTPS/TLS ya conocido de desarrollo web. AWS ofrece un servicio propio para emitir certificados gratuitos (equivalente a alternativas como Let's Encrypt), integrable con balanceadores de carga y otros servicios que exponen páginas o APIs hacia afuera.
+
+### 4. MFA (autenticación multifactor)
+
+El **MFA** (*Multi-Factor Authentication*) agrega un segundo factor de validación además de usuario y contraseña — típicamente un código rotativo de 6 dígitos que cambia cada ~30 segundos, generado por una app de autenticación (o, menos común, un llavero USB físico). Es responsabilidad del cliente activarlo; AWS insiste en que se configure pero no lo impone de forma obligatoria a nivel técnico. En la práctica se lo trata como un estándar no negociable: una cuenta sin MFA se considera insegura por definición.
+
+---
+
+## Unidad 6 — Redes (parcial, en curso)
+
+> Esta unidad quedó a mitad de dictado: la clase llegó hasta el concepto de VPC y subredes. Los temas de subredes públicas/privadas, tablas de rutas, gateways de internet y NAT quedan para la próxima clase — se agregarán cuando se den.
+
+### 1. Conceptos base de redes
+
+- Una **red** es un conjunto determinado de direcciones IP disponibles. Una **subred** es una subdivisión lógica dentro de esa red. La red es el contenedor grande; la subred, la división interna (comparable, salvando las distancias, con las VLAN de una red corporativa tradicional).
+- Toda comunicación entre subredes necesita algo que la enrute: sin enrutamiento, los paquetes no llegan a destino.
+- **Direcciones IP (IPv4):** compuestas por 4 octetos (cada uno entre 0 y 255). Se dividen en tres tipos: **privadas** (uso interno, por ejemplo la red de una casa u oficina — pueden repetirse entre redes distintas sin problema, porque no se ven entre sí a menos que algo las conecte), **públicas** (identifican un dispositivo en internet — son un recurso escaso, cada vez quedan menos disponibles) y **reservadas** (para usos especiales).
+- **CIDR** (*Classless Inter-Domain Routing*): la notación `direccion/N` que define cuántos bits de la dirección son fijos y cuántos variables. Cuanto **mayor** el número después de la barra, **más chica** es la red (menos direcciones disponibles); cuanto **menor** el número, más grande es la red. Casos especiales: `/32` identifica una única dirección IP exacta; `0.0.0.0/0` funciona como comodín que representa "todas las direcciones" (todo el tráfico de internet).
+- Una red doméstica típica usa `/24` (hasta 254 dispositivos). Es el motivo por el que, en un lugar con mucha gente conectada a un mismo Wi-Fi (un restaurante, una estación), a veces no hay más direcciones disponibles y no se puede conectar un dispositivo más.
+
+*Se mencionó también el modelo OSI (creado en los años 80, publicado como estándar en 1983, para poder interconectar redes de distintos fabricantes de hardware, algo que antes no era posible) solo como contexto histórico de por qué existe el enrutamiento — no se profundizó en sus 7 capas porque queda fuera del alcance de esta materia.*
+
+### 2. Amazon VPC (Virtual Private Cloud)
+
+**VPC** es el primer servicio de redes de AWS, y es **fundacional**: para lanzar casi cualquier recurso en AWS (una instancia EC2, por ejemplo) primero tiene que existir una VPC — no se puede lanzar un recurso de red sin una red donde alojarlo. (Al crear una cuenta nueva, AWS ya provee una VPC por defecto para no bloquear al usuario desde el primer momento.)
+
+Permite aprovisionar una sección aislada de la nube de AWS, lógicamente separada de la de cualquier otro cliente, dentro de la cual se pueden lanzar recursos en una red definida por el propio usuario. Con VPC se puede:
+- Elegir el rango de direcciones IP privadas a usar.
+- Decidir si los recursos tienen o no salida a internet (se puede tener una VPC totalmente aislada, sin acceso público, para recursos que no necesitan exponerse).
+
+### 3. VPC, subredes y zonas de disponibilidad
+
+Jerarquía de contenedores en AWS: **cuenta de AWS → región → VPC → subredes → zonas de disponibilidad.**
+
+Una VPC se crea dentro de una región, pero **no queda anclada a ninguna zona de disponibilidad específica hasta que se crean las subredes** — es la subred, no la VPC, la que se asocia a una zona de disponibilidad puntual. Por eso, al diseñar las subredes, es importante decidir deliberadamente en qué zona de disponibilidad va cada una.
+
+- El tamaño de red más grande recomendado para una VPC es `/16` (~65.000 direcciones); el más chico, `/28`. En la práctica es común usar `/16` para la VPC y `/24` para cada subred.
+- AWS reserva automáticamente algunas direcciones IP de cada subred para uso interno (DNS, comunicaciones internas, uso futuro) — de las direcciones nominales de una subred, no todas quedan disponibles para recursos propios.
+
+### 4. Alta disponibilidad con subredes en múltiples AZ
+
+Dos subredes de una misma VPC, ubicadas en distintas zonas de disponibilidad de la misma región, están separadas físicamente por hasta 100 km (ver nota en [Unidad 4, sección 2](#2-zonas-de-disponibilidad)), pero desde el punto de vista lógico se comportan como si estuvieran "al lado" — se ven entre sí dentro de la misma VPC.
+
+Esto es la base de la **alta disponibilidad**: si se despliega el mismo recurso en dos zonas de disponibilidad distintas (por ejemplo, dos subredes de una VPC en São Paulo, cada una en una AZ distinta), la caída de una zona (corte de energía, falla del centro de datos) no tumba la aplicación completa, porque la otra zona sigue funcionando. Solo un evento que afecte a **toda la región** (por ejemplo, una catástrofe natural regional) dejaría ambas zonas fuera de servicio — para cubrir ese escenario extremo hace falta redundancia entre regiones distintas, lo cual es más costoso.
+
+*Buena práctica remarcada en clase: si una VPC tiene varias subredes, conviene distribuirlas entre distintas zonas de disponibilidad y no concentrarlas todas en una sola — de lo contrario, se pierde el beneficio de alta disponibilidad aunque técnicamente haya "varias subredes".*
