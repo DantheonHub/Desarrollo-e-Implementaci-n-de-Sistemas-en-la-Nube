@@ -66,11 +66,20 @@ Apuntes de referencia de la materia **Desarrollo e Implementación de Sistemas e
       - [3.1 Cifrado en reposo](#31-cifrado-en-reposo)
       - [3.2 Cifrado en tránsito](#32-cifrado-en-tránsito)
     - [4. MFA (autenticación multifactor)](#4-mfa-autenticación-multifactor)
-  - [Unidad 6 — Redes (parcial, en curso)](#unidad-6--redes-parcial-en-curso)
+  - [Unidad 6 — Redes](#unidad-6--redes)
     - [1. Conceptos base de redes](#1-conceptos-base-de-redes)
     - [2. Amazon VPC (Virtual Private Cloud)](#2-amazon-vpc-virtual-private-cloud)
     - [3. VPC, subredes y zonas de disponibilidad](#3-vpc-subredes-y-zonas-de-disponibilidad)
     - [4. Alta disponibilidad con subredes en múltiples AZ](#4-alta-disponibilidad-con-subredes-en-múltiples-az)
+    - [5. Direcciones IP pública vs. IP elástica](#5-direcciones-ip-pública-vs-ip-elástica)
+    - [6. Tablas de enrutamiento](#6-tablas-de-enrutamiento)
+    - [7. Internet Gateway (IGW)](#7-internet-gateway-igw)
+    - [8. Subredes públicas y privadas (en detalle)](#8-subredes-públicas-y-privadas-en-detalle)
+    - [9. NAT Gateway](#9-nat-gateway)
+    - [10. Interconexión entre VPC](#10-interconexión-entre-vpc)
+    - [11. Grupos de seguridad (Security Groups)](#11-grupos-de-seguridad-security-groups)
+    - [12. Listas de control de acceso a la red (NACL)](#12-listas-de-control-de-acceso-a-la-red-nacl)
+    - [13. Cierre y próximos pasos](#13-cierre-y-próximos-pasos)
 
 ---
 
@@ -535,9 +544,9 @@ El **MFA** (*Multi-Factor Authentication*) agrega un segundo factor de validaci�
 
 ---
 
-## Unidad 6 — Redes (parcial, en curso)
+## Unidad 6 — Redes
 
-> Esta unidad quedó a mitad de dictado: la clase llegó hasta el concepto de VPC y subredes. Los temas de subredes públicas/privadas, tablas de rutas, gateways de internet y NAT quedan para la próxima clase — se agregarán cuando se den.
+> Contenido dado entre la Clase 3 y la Clase 4. Queda pendiente para la próxima clase: el laboratorio de VPC (Laboratorio 2) y la Unidad 7 (cómputo).
 
 ### 1. Conceptos base de redes
 
@@ -573,3 +582,81 @@ Dos subredes de una misma VPC, ubicadas en distintas zonas de disponibilidad de 
 Esto es la base de la **alta disponibilidad**: si se despliega el mismo recurso en dos zonas de disponibilidad distintas (por ejemplo, dos subredes de una VPC en São Paulo, cada una en una AZ distinta), la caída de una zona (corte de energía, falla del centro de datos) no tumba la aplicación completa, porque la otra zona sigue funcionando. Solo un evento que afecte a **toda la región** (por ejemplo, una catástrofe natural regional) dejaría ambas zonas fuera de servicio — para cubrir ese escenario extremo hace falta redundancia entre regiones distintas, lo cual es más costoso.
 
 *Buena práctica remarcada en clase: si una VPC tiene varias subredes, conviene distribuirlas entre distintas zonas de disponibilidad y no concentrarlas todas en una sola — de lo contrario, se pierde el beneficio de alta disponibilidad aunque técnicamente haya "varias subredes".*
+
+### 5. Direcciones IP pública vs. IP elástica
+
+Ambas son direcciones IP públicas, pero se diferencian en dos criterios: costo y pertenencia.
+
+- **IP pública automática:** la subred puede configurarse para asignar automáticamente una IP pública a cada recurso que se lanza dentro de ella. Es gratuita, pero **cambia** cada vez que el recurso se apaga y se vuelve a encender — no queda fija.
+- **IP elástica (*Elastic IP*):** una IP pública que **pertenece a la cuenta** mientras se la siga pagando (tiene un costo mensual, del orden de unos dólares). No cambia nunca, incluso si se apaga y prende el recurso, y se puede desasociar de un recurso y asociar a otro sin perderla — útil, por ejemplo, si un servidor falla y hay que reemplazarlo por uno nuevo sin cambiar la dirección con la que ya se lo identificaba (DNS, integraciones, etc.). Cada cuenta tiene un límite (de referencia, 5 por región) que se puede ampliar pidiéndolo a soporte de AWS — es un límite blando, no duro. Existe este límite porque las direcciones IPv4 públicas son un recurso escaso a nivel mundial (motivo, junto con otros, de la migración en curso hacia IPv6).
+
+### 6. Tablas de enrutamiento
+
+La **tabla de enrutamiento** (*route table*) es el conjunto de reglas que determina hacia dónde se dirige el tráfico desde una subred — el equivalente al GPS de los paquetes de red. Cada subred tiene su propia tabla asociada. Principio clave: **si un destino no está declarado en la tabla, no es alcanzable**, aunque exista conectividad física — el enrutamiento es puramente declarativo.
+
+Este mismo concepto de tabla de enrutamiento existe en cualquier dispositivo de red (una PC, un router doméstico, el router del proveedor de internet) — no es exclusivo de AWS.
+
+### 7. Internet Gateway (IGW)
+
+El **Internet Gateway** es un componente que se asocia a una VPC y permite la comunicación entre los recursos de la VPC e internet. Cumple dos funciones:
+1. Proporciona el destino en la tabla de enrutamiento para el tráfico hacia internet (la ruta hacia el comodín `0.0.0.0/0`).
+2. Permite que los recursos con IP pública sean alcanzables desde internet.
+
+Sin una ruta hacia el Internet Gateway en la tabla de enrutamiento de una subred, un recurso de esa subred no tiene salida a internet aunque el Gateway ya esté asociado a la VPC — de nuevo, todo pasa por la tabla.
+
+### 8. Subredes públicas y privadas (en detalle)
+
+- **Subred pública:** tiene activada la asignación automática de IP pública, y su tabla de enrutamiento tiene una ruta hacia el Internet Gateway. Un recurso en una subred pública es alcanzable desde internet (entrada) y puede salir a internet directamente (salida) — ambos sentidos usan la misma IP pública.
+- **Subred privada:** no asigna IP pública a los recursos — solo tienen IP privada. Un recurso en una subred privada **no es alcanzable desde internet**, lo cual es deseable por seguridad para cualquier carga de trabajo que no necesite exponerse directamente.
+
+### 9. NAT Gateway
+
+Si un recurso en una subred privada necesita salir a internet (por ejemplo, para descargar una actualización) sin tener IP pública propia, se usa un **NAT Gateway** (*Network Address Translation*). Vive físicamente en una subred pública, pero la tabla de enrutamiento de la subred privada lo referencia como salida hacia `0.0.0.0/0`. El NAT Gateway "traduce" las direcciones privadas hacia su propia IP pública para salir a internet — el mismo concepto que usa un router doméstico: varios dispositivos con IP privada comparten una única IP pública de salida.
+
+La diferencia clave frente al Internet Gateway: el NAT permite **salida** a internet, pero no permite que tráfico entrante desde internet inicie una conexión hacia el recurso privado — solo entran respuestas a algo que el propio recurso inició.
+
+*Buena práctica remarcada en clase: la infraestructura y las cargas de trabajo deberían vivir en subredes privadas; en la subred pública solo deberían ir componentes de borde (el NAT Gateway, balanceadores de carga, etc.). Es una falla de seguridad común y real (mencionada en clase con un caso de una empresa grande del sector salud) tener todos los servidores en subredes públicas sin necesidad. Por defecto, cuando AWS crea automáticamente una VPC nueva, todas las subredes que sugiere son públicas — conviene revisar y no dejarlo así.*
+
+### 10. Interconexión entre VPC
+
+- **Compartir una VPC entre cuentas** (*VPC sharing*): una cuenta puede compartir su VPC con otra cuenta de AWS; los recursos que la segunda cuenta despliegue ahí funcionan como si fueran locales a la red compartida. Requiere autorización de ambos lados. Útil quan se quiere pagar los recursos de cómputo por separado (cada cuenta paga los suyos) pero compartir una única red. Común en entornos corporativos.
+- **VPC Peering:** conecta dos VPC distintas (de la misma cuenta, de otra cuenta, o de otra región) agregando una entrada en la tabla de enrutamiento de cada una que apunta a la otra a través de la conexión de *peering*. Restricción: los rangos de IP privadas de ambas VPC no pueden superponerse. Importante: **no es transitivo** — si A está conectada con B, y B con C, eso no conecta automáticamente A con C.
+- **VPN de sitio a sitio (Site-to-Site VPN):** conecta el centro de datos/oficina propios con la VPC de AWS a través de un túnel cifrado sobre internet, como si fueran una sola red. Es un estándar bastante genérico (compatible con Fortinet, Cisco, y otras marcas de equipos VPN del lado del cliente). Muy usado en entornos corporativos.
+- **AWS Direct Connect:** conexión física dedicada entre el centro de datos propio y AWS, sin pasar por la internet pública — mejor rendimiento y latencia que una VPN, pero con costo y trámite de contratación mucho mayores (no se activa con un clic; requiere que el proveedor de internet tenga el servicio habilitado). Es de los servicios menos usados en la práctica, justamente por ese costo y complejidad.
+- **AWS Transit Gateway:** cuando hay muchas VPC que necesitan verse entre sí (docenas), interconectarlas de a pares deja de ser viable (las conexiones no son transitivas, y el número de conexiones necesarias crece muy rápido). Transit Gateway actúa como un "hub" central: cada VPC se conecta una sola vez al Transit Gateway, y este administra el enrutamiento entre todas. Es un servicio de configuración compleja (aunque hoy asistida por herramientas de IA) y de costo más alto, típico de escenarios corporativos grandes.
+- **VPC Endpoints (puntos de enlace):** permiten que un recurso en una subred privada consuma un servicio de AWS que normalmente se accede por internet (por ejemplo, S3) sin necesidad de darle salida general a internet — el tráfico va por una ruta interna de AWS. Útil cuando una política de seguridad prohíbe que un recurso tenga salida a internet, pero igual necesita usar un servicio puntual de AWS.
+
+### 11. Grupos de seguridad (Security Groups)
+
+Actúan como un firewall virtual a nivel de instancia/recurso de red (todo recurso que se conecta a una red de AWS tiene un grupo de seguridad asociado, incluso si técnicamente no lo necesitaría — es una herencia del diseño original de AWS, donde VPC fue el primer servicio de red).
+
+- Se dividen en **reglas de entrada** y **reglas de salida**.
+- Por defecto: **toda la salida está permitida**; **toda la entrada está bloqueada** (no hay ningún puerto abierto hasta que se configure explícitamente).
+- Un grupo de seguridad **solo permite** — no tiene una regla de "denegar" explícita. Si se necesita bloquear una IP puntual (por ejemplo, una IP que está atacando), un grupo de seguridad no alcanza; hace falta otra herramienta.
+- **Tienen estado** (*stateful*): si se permite el tráfico de salida hacia un destino, la respuesta a ese tráfico se permite automáticamente de vuelta, sin necesidad de declarar una regla de entrada separada para esa respuesta.
+- Se pueden **referenciar entre sí**: en vez de escribir la IP de otro recurso, una regla puede decir "permitir tráfico desde el grupo de seguridad X" — útil para permitir comunicación entre recursos sin tener que rastrear direcciones IP.
+- Un recurso puede tener varios grupos de seguridad asociados a la vez (se combinan).
+
+*Mala práctica común y real: para "que ande rápido", reemplazar la regla de entrada por `0.0.0.0/0` sin pensarlo (equivalente a abrir el recurso a cualquier IP del mundo). Con una instancia expuesta así en internet, los intentos de ataque automatizados empiezan en cuestión de segundos a minutos.*
+
+### 12. Listas de control de acceso a la red (NACL)
+
+Las **NACL** (*Network Access Control Lists*) son otra capa de seguridad, menos usada en la práctica que los grupos de seguridad porque son más restrictivas y fáciles de romper por error.
+
+| | Grupos de seguridad | NACL |
+|---|---|---|
+| Nivel de aplicación | Instancia / recurso de red | Subred (toda la subred) |
+| Estado | Con estado (*stateful*) — la respuesta a lo permitido se permite sola | Sin estado (*stateless*) — hay que declarar entrada y salida por separado |
+| Tipo de reglas | Solo permiten (*allow*) | Permiten **y** deniegan (*allow*/*deny*) explícitamente |
+| Prioridad | Se evalúan después de las NACL | Se evalúan **antes** — si una NACL bloquea el tráfico, ni siquiera llega al grupo de seguridad |
+| Configuración | Numeradas por prioridad (se evalúa la de número más bajo primero); si ninguna regla matchea, se deniega por defecto | |
+
+Por defecto, una NACL nueva permite todo el tráfico de entrada y salida — el mismo comportamiento permisivo que luego alguien puede modificar sin darse cuenta del alcance (al ser a nivel de subred completa, un cambio mal hecho corta el tráfico de todos los recursos de esa subred, no de uno solo).
+
+### 13. Cierre y próximos pasos
+
+Con esto queda cerrado, a nivel conceptual, lo esencial del módulo de redes: qué es una VPC, la diferencia entre subred pública y privada, y qué son los grupos de seguridad — la base que se va a volver a usar constantemente al conectar servicios entre sí (por ejemplo, una instancia con una base de datos) en el resto de la cursada.
+
+Quedan pendientes para clases siguientes:
+- **Laboratorio 2** (módulo 5 de AWS Academy): armar una VPC completa a mano (subredes, rutas, grupo de seguridad) y lanzar una instancia con un servidor web accesible desde afuera — se hará en conjunto en la próxima clase.
+- **Unidad 7 — Cómputo** (instancias, tipos de servicio de cómputo): arranca en la próxima clase, antes o junto con el laboratorio.
