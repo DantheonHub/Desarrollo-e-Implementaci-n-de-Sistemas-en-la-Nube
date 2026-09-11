@@ -79,7 +79,14 @@ Apuntes de referencia de la materia **Desarrollo e Implementación de Sistemas e
     - [10. Interconexión entre VPC](#10-interconexión-entre-vpc)
     - [11. Grupos de seguridad (Security Groups)](#11-grupos-de-seguridad-security-groups)
     - [12. Listas de control de acceso a la red (NACL)](#12-listas-de-control-de-acceso-a-la-red-nacl)
-    - [13. Cierre y próximos pasos](#13-cierre-y-próximos-pasos)
+    - [13. Cierre conceptual](#13-cierre-conceptual)
+    - [14. Ejemplo práctico — Laboratorio: VPC + servidor web](#14-ejemplo-práctico--laboratorio-vpc--servidor-web)
+  - [Unidad 7 — Cómputo](#unidad-7--cómputo)
+    - [1. Máquinas virtuales vs. contenedores](#1-máquinas-virtuales-vs-contenedores)
+    - [2. Servicios de cómputo de AWS](#2-servicios-de-cómputo-de-aws)
+    - [3. Elegir dónde ejecutar el cómputo](#3-elegir-dónde-ejecutar-el-cómputo)
+    - [4. Amazon EC2 en detalle](#4-amazon-ec2-en-detalle)
+    - [5. Escalado horizontal vs. vertical](#5-escalado-horizontal-vs-vertical)
 
 ---
 
@@ -125,7 +132,7 @@ Hoy AWS ofrece más de 200 servicios distintos (cómputo, bases de datos, redes,
 
 Después de AWS surgieron otros proveedores de nube pública: **Microsoft Azure**, **Google Cloud**, **Oracle Cloud**, y más recientemente proveedores chinos como **Alibaba Cloud** y **Huawei Cloud** (este último con fuerte presencia en Latinoamérica, principalmente por precio).
 
-*El profesor citó un gráfico de ~2020 con AWS en 33-35%. Dato actualizado (Synergy Research Group, Q1 2026): AWS 28-30%, Azure 21-25%, Google Cloud 13-14%.*
+*Un gráfico de referencia de ~2020 ubicaba a AWS en 33-35% del mercado. Dato actualizado (Synergy Research Group, Q1 2026): AWS 28-30%, Azure 21-25%, Google Cloud 13-14%.*
 
 ### 3. Modelos de servicio en la nube: IaaS, PaaS y SaaS
 
@@ -189,7 +196,7 @@ AWS fue diseñando sus servicios para cubrir, con equivalentes en la nube, las m
 | Base de datos instalada y administrada localmente | Servicios de bases de datos gestionadas |
 | Centro de datos propio | Regiones y centros de datos del proveedor |
 
-> Esta tabla es una simplificación pensada para quienes ya conocen infraestructura tradicional y quieren "traducir" esos conceptos a la nube. AWS tiene más de 200 servicios; acá solo se listan los equivalentes más directos mencionados en clase. Quienes ya son "nativos de nube" es probable que recorran el camino inverso: primero conocen el servicio en AWS y después, si les interesa, entienden a qué equivalía en infraestructura tradicional.
+> Esta tabla es una simplificación pensada para quienes ya conocen infraestructura tradicional y quieren "traducir" esos conceptos a la nube. AWS tiene más de 200 servicios; acá solo se listan los equivalentes más directos y frecuentes. Quienes ya son "nativos de nube" es probable que recorran el camino inverso: primero conocen el servicio en AWS y después, si les interesa, entienden a qué equivalía en infraestructura tradicional.
 
 ### 6. Beneficios de la computación en la nube
 
@@ -197,7 +204,7 @@ AWS fue diseñando sus servicios para cubrir, con equivalentes en la nube, las m
 
 Se paga por lo que efectivamente se consume (por ejemplo, el tiempo que un servidor está encendido), en lugar de tener que comprar hardware por adelantado y pagarlo esté o no en uso al 100% de su capacidad.
 
-> Nota: este principio no es absoluto en todos los servicios. Hay servicios (por ejemplo, ciertos planes de almacenamiento tipo suscripción) donde se paga un monto fijo independientemente del uso real; el profesor lo remarca como una "zona gris" a tener en cuenta.
+> Nota: este principio no es absoluto en todos los servicios. Hay servicios (por ejemplo, ciertos planes de almacenamiento tipo suscripción) donde se paga un monto fijo independientemente del uso real — es una zona gris a tener en cuenta.
 
 #### 6.2 Elasticidad y escalabilidad
 
@@ -225,7 +232,7 @@ Los proveedores de nube incorporan rápidamente hardware y tecnología de últim
 
 **DevOps** (de *Development* + *Operations*) es una metodología orientada a **automatizar el aprovisionamiento de infraestructura** como parte del mismo proceso de creación y publicación de un producto. La idea central es que, mientras se desarrolla una solución, en paralelo se va generando (de forma automatizada) la infraestructura donde esa solución va a correr, en lugar de crear el producto primero y ocuparse de la infraestructura como un paso separado y posterior.
 
-> Este fue solo un comentario introductorio del profesor en el contexto de los beneficios de la nube (automatización). Se espera que el tema se profundice más adelante en la cursada; por ahora se documenta únicamente esta definición base para no exceder lo que efectivamente se explicó en clase.
+> Es una definición base, en el contexto de los beneficios de automatización de la nube; el desarrollo más profundo de DevOps excede el alcance de esta unidad.
 
 ---
 
@@ -382,7 +389,7 @@ En la práctica, la región **us-east-1 (Norte de Virginia)** suele ser la prime
 
 ![Estructura de región, zonas de disponibilidad y centros de datos en AWS](img/unidad4-region-az.svg)
 
-*Distancia confirmada en la Clase 3: hasta 100 km entre centros de datos de una misma región, límite impuesto por latencia (para que el enlace entre zonas se comporte como si estuvieran "al lado", la latencia entre ellas debe mantenerse por debajo de ~1 milisegundo).*
+*Distancia entre centros de datos de una misma región: hasta 100 km, límite impuesto por latencia (para que el enlace entre zonas se comporte como si estuvieran "al lado", la latencia entre ellas debe mantenerse por debajo de ~1 milisegundo).*
 
 ### 3. Centros de datos
 
@@ -408,7 +415,7 @@ Estas características se sostienen, en cada región, gracias a que cada zona de
 
 ### 6. Categorías de servicios de AWS
 
-AWS agrupa sus más de 200 servicios en categorías. Estas son las que se vieron en clase con sus servicios principales:
+AWS agrupa sus más de 200 servicios en categorías. Estas son las más relevantes para esta unidad, con sus servicios principales:
 
 #### 6.1 Almacenamiento
 
@@ -419,7 +426,7 @@ AWS agrupa sus más de 200 servicios en categorías. Estas son las que se vieron
 
 #### 6.2 Cómputo / informática
 
-- **Amazon EC2 (Elastic Compute Cloud):** el servicio de máquinas virtuales — se elige sistema operativo, CPU, RAM y se obtiene un servidor virtual. Es el servicio fundacional de cómputo de AWS: el más utilizado y, según el profesor, probablemente el que más factura.
+- **Amazon EC2 (Elastic Compute Cloud):** el servicio de máquinas virtuales — se elige sistema operativo, CPU, RAM y se obtiene un servidor virtual. Es el servicio fundacional de cómputo de AWS: el más utilizado y, según estimaciones de mercado, posiblemente el que más ingresos genera para AWS.
 - **Amazon EC2 Auto Scaling:** ajusta automáticamente la cantidad de instancias EC2 según la demanda.
 - **AWS Lambda:** cómputo *serverless* ("función como servicio"). Se sube un fragmento de código (una función) que se ejecuta solo cuando algo lo invoca (por ejemplo, una URL), y se factura por el tiempo de cómputo real que consumió esa ejecución (del orden de milisegundos). No sirve para tener un proceso corriendo permanentemente, pero es muy usado por desarrolladores porque evita instalar y mantener un servidor.
 - **Amazon ECS / Amazon EKS (Elastic Kubernetes Service):** orquestación de contenedores (EKS es la implementación de Kubernetes de AWS).
@@ -461,7 +468,7 @@ AWS agrupa sus más de 200 servicios en categorías. Estas son las que se vieron
 - **AWS Well-Architected Tool:** evalúa una arquitectura contra los pilares del *Well-Architected Framework* de AWS.
 - **Consola de administración de AWS / CLI de AWS:** las dos formas principales de interactuar con todos los servicios (interfaz web vs. línea de comandos).
 
-> Nota: no se listan acá todas las categorías que muestra AWS (también existen, por ejemplo, análisis de datos, integración de aplicaciones, machine learning, IoT, RA/RV, robótica, servicios satelitales, entre otras) porque no fueron desarrolladas en esta clase — se documentan solo las que efectivamente se explicaron.
+> Nota: no se listan acá todas las categorías que ofrece AWS (también existen, por ejemplo, análisis de datos, integración de aplicaciones, machine learning, IoT, RA/RV, robótica, servicios satelitales, entre otras) — quedan fuera del alcance de esta unidad.
 
 ---
 
@@ -483,9 +490,9 @@ El modelo de responsabilidad compartida no es fijo para todos los servicios por 
 
 **En PaaS**, el cliente pierde parte de esa carga: por ejemplo, AWS se encarga del parcheo del sistema operativo subyacente, y el cliente se concentra en su código y sus datos.
 
-**En SaaS**, prácticamente toda la responsabilidad recae en el proveedor; el cliente es solo usuario (ejemplo real citado en clase: un incidente de disponibilidad en GitHub afectó a todos sus usuarios — ahí la responsabilidad de resolverlo es de GitHub/Microsoft, no de cada usuario individual).
+**En SaaS**, prácticamente toda la responsabilidad recae en el proveedor; el cliente es solo usuario (ejemplo ilustrativo: un incidente de disponibilidad en GitHub afecta a todos sus usuarios por igual — la responsabilidad de resolverlo es de GitHub/Microsoft, no de cada usuario individual).
 
-*Analogía usada en clase para separar responsabilidades: AWS entrega la llave del "departamento" (el recurso) una sola vez. Puede reemplazar la cerradura si hace falta, pero no puede volver a entregar la llave original si el cliente la pierde — la custodia de esa llave, desde el momento en que se entrega, es responsabilidad exclusiva del cliente.*
+*Analogía útil para separar responsabilidades: AWS entrega la llave del "departamento" (el recurso) una sola vez. Puede reemplazar la cerradura si hace falta, pero no puede volver a entregar la llave original si el cliente la pierde — la custodia de esa llave, desde el momento en que se entrega, es responsabilidad exclusiva del cliente.*
 
 ### 2. AWS IAM (Identity and Access Management)
 
@@ -508,7 +515,7 @@ Toda acción sobre un recurso en AWS queda **registrada y trazada a una identida
 - **Política:** un documento (en formato JSON) que define qué acciones se permiten o deniegan, sobre qué recursos y para quién. Puede ser muy simple (por ejemplo, una política de administrador de solo unas líneas con asteriscos, que da acceso total a todo) o muy granular (especificando recurso por recurso, acción por acción).
 - **Rol:** un mecanismo para conceder permisos de forma **temporal**, para una tarea puntual — no es algo permanente como una política asociada a un usuario. Un usuario puede tener permisos básicos, y bajo ciertas condiciones "asumir" un rol que le da permisos más amplios solo mientras dura la tarea; al terminar, vuelve a su nivel de permisos habitual.
 
-*Analogía usada en clase: los cascos de colores en una fábrica. El casco blanco (visita) permite entrar a ciertas zonas; el casco amarillo (un rol distinto) permite entrar a otras, como la sala de calderas. Es la misma persona, pero el rol que tiene puesto en cada momento determina a qué puede acceder — y ese rol se "saca" al terminar la tarea.*
+*Analogía útil para pensarlo: los cascos de colores en una fábrica. El casco blanco (visita) permite entrar a ciertas zonas; el casco amarillo (un rol distinto) permite entrar a otras, como la sala de calderas. Es la misma persona, pero el rol que tiene puesto en cada momento determina a qué puede acceder — y ese rol se "saca" al terminar la tarea.*
 
 Los roles se usan mucho para que **dos servicios de AWS se comuniquen entre sí** sin intervención humana: un servicio asume un rol para poder actuar sobre otro recurso.
 
@@ -546,7 +553,7 @@ El **MFA** (*Multi-Factor Authentication*) agrega un segundo factor de validaci�
 
 ## Unidad 6 — Redes
 
-> Contenido dado entre la Clase 3 y la Clase 4. Queda pendiente para la próxima clase: el laboratorio de VPC (Laboratorio 2) y la Unidad 7 (cómputo).
+> Unidad en desarrollo. Queda pendiente: el laboratorio de VPC (Laboratorio 2) y la Unidad 7 (cómputo).
 
 ### 1. Conceptos base de redes
 
@@ -581,7 +588,7 @@ Dos subredes de una misma VPC, ubicadas en distintas zonas de disponibilidad de 
 
 Esto es la base de la **alta disponibilidad**: si se despliega el mismo recurso en dos zonas de disponibilidad distintas (por ejemplo, dos subredes de una VPC en São Paulo, cada una en una AZ distinta), la caída de una zona (corte de energía, falla del centro de datos) no tumba la aplicación completa, porque la otra zona sigue funcionando. Solo un evento que afecte a **toda la región** (por ejemplo, una catástrofe natural regional) dejaría ambas zonas fuera de servicio — para cubrir ese escenario extremo hace falta redundancia entre regiones distintas, lo cual es más costoso.
 
-*Buena práctica remarcada en clase: si una VPC tiene varias subredes, conviene distribuirlas entre distintas zonas de disponibilidad y no concentrarlas todas en una sola — de lo contrario, se pierde el beneficio de alta disponibilidad aunque técnicamente haya "varias subredes".*
+*Buena práctica recomendada: si una VPC tiene varias subredes, conviene distribuirlas entre distintas zonas de disponibilidad y no concentrarlas todas en una sola — de lo contrario, se pierde el beneficio de alta disponibilidad aunque técnicamente haya "varias subredes".*
 
 ### 5. Direcciones IP pública vs. IP elástica
 
@@ -615,7 +622,7 @@ Si un recurso en una subred privada necesita salir a internet (por ejemplo, para
 
 La diferencia clave frente al Internet Gateway: el NAT permite **salida** a internet, pero no permite que tráfico entrante desde internet inicie una conexión hacia el recurso privado — solo entran respuestas a algo que el propio recurso inició.
 
-*Buena práctica remarcada en clase: la infraestructura y las cargas de trabajo deberían vivir en subredes privadas; en la subred pública solo deberían ir componentes de borde (el NAT Gateway, balanceadores de carga, etc.). Es una falla de seguridad común y real (mencionada en clase con un caso de una empresa grande del sector salud) tener todos los servidores en subredes públicas sin necesidad. Por defecto, cuando AWS crea automáticamente una VPC nueva, todas las subredes que sugiere son públicas — conviene revisar y no dejarlo así.*
+*Buena práctica recomendada: la infraestructura y las cargas de trabajo deberían vivir en subredes privadas; en la subred pública solo deberían ir componentes de borde (el NAT Gateway, balanceadores de carga, etc.). Es una falla de seguridad común en la práctica (caso real: una empresa grande del sector salud tenía todos sus servidores en subredes públicas sin necesidad). Por defecto, cuando AWS crea automáticamente una VPC nueva, todas las subredes que sugiere son públicas — conviene revisar y no dejarlo así.*
 
 ### 10. Interconexión entre VPC
 
@@ -653,10 +660,99 @@ Las **NACL** (*Network Access Control Lists*) son otra capa de seguridad, menos 
 
 Por defecto, una NACL nueva permite todo el tráfico de entrada y salida — el mismo comportamiento permisivo que luego alguien puede modificar sin darse cuenta del alcance (al ser a nivel de subred completa, un cambio mal hecho corta el tráfico de todos los recursos de esa subred, no de uno solo).
 
-### 13. Cierre y próximos pasos
+### 13. Cierre conceptual
 
-Con esto queda cerrado, a nivel conceptual, lo esencial del módulo de redes: qué es una VPC, la diferencia entre subred pública y privada, y qué son los grupos de seguridad — la base que se va a volver a usar constantemente al conectar servicios entre sí (por ejemplo, una instancia con una base de datos) en el resto de la cursada.
+Con esto queda cerrado, a nivel conceptual, lo esencial del módulo de redes: qué es una VPC, la diferencia entre subred pública y privada, y qué son los grupos de seguridad — la base que se vuelve a usar constantemente al conectar servicios entre sí (por ejemplo, una instancia con una base de datos).
 
-Quedan pendientes para clases siguientes:
-- **Laboratorio 2** (módulo 5 de AWS Academy): armar una VPC completa a mano (subredes, rutas, grupo de seguridad) y lanzar una instancia con un servidor web accesible desde afuera — se hará en conjunto en la próxima clase.
-- **Unidad 7 — Cómputo** (instancias, tipos de servicio de cómputo): arranca en la próxima clase, antes o junto con el laboratorio.
+### 14. Ejemplo práctico — Laboratorio: VPC + servidor web
+
+Secuencia completa de un laboratorio guiado de AWS Academy (módulo 5): crear una VPC con dos zonas de disponibilidad, cuatro subredes (pública y privada en cada AZ), un Internet Gateway, un NAT Gateway, y lanzar una instancia EC2 con un servidor web accesible desde internet.
+
+**1. Crear la VPC (asistente):**
+- Bloque CIDR de la VPC: `10.0.0.0/16` (65.536 direcciones IP).
+- Zonas de disponibilidad a usar: 1 (el asistente permite elegir más de una, pero para simplificar el ejercicio arranca con una sola).
+- Subredes iniciales: 1 pública + 1 privada, con bloques CIDR ajustados a `/24` (pública: `10.0.0.0/24`; privada: `10.0.1.0/24` — 256 IP cada una).
+- Puerta de enlace NAT: se puede elegir "ninguna", "en una zona (zonal)" o "en cada zona (regional)". Con una sola AZ configurada, solo aparece la opción zonal.
+- Opciones adicionales del asistente: habilitar nombre de host y resolución de DNS interna (para poder identificar recursos dentro de la red por nombre en vez de por IP — solo válido dentro de la propia red, no desde afuera). El asistente no ofrece bloque CIDR de IPv6 en este flujo (para IPv6 el bloque lo asigna AWS, no lo define el usuario, a diferencia de IPv4).
+- El asistente tarda un par de minutos en aprovisionar todo; lo que más demora es la creación de los gateways (son el componente más "físico" de crear).
+
+**2. Agregar las subredes restantes:**
+- Se crean manualmente la segunda subred pública y la segunda subred privada, cada una en la segunda zona de disponibilidad, con sus propios bloques CIDR `/24` (por ejemplo `10.0.2.0/24` y `10.0.3.0/24`).
+- El nombre que se le da a una subred (por ejemplo, "pública") es solo una etiqueta — no determina su comportamiento. Lo que hace pública o privada a una subred es su tabla de enrutamiento, no su nombre.
+
+**3. Asociar las tablas de enrutamiento:**
+- La tabla de enrutamiento privada (creada automáticamente por AWS junto con la VPC) tiene dos rutas: el destino "local" (todo el rango `10.0.0.0/16`, resuelto dentro de la propia red) y el destino `0.0.0.0/0` hacia el NAT Gateway.
+- La tabla de enrutamiento pública tiene, en cambio, `0.0.0.0/0` apuntando al Internet Gateway.
+- Una tabla de enrutamiento resuelve primero la ruta más específica (el rango más chico) antes que la más general — por eso conviven "local" (más específica) y `0.0.0.0/0` (comodín, la más general) sin conflicto.
+- Cada subred nueva (la segunda pública y la segunda privada) se asocia manualmente a la tabla de enrutamiento correspondiente, para heredar el mismo comportamiento que la primera subred de su tipo.
+
+**4. Crear el grupo de seguridad:**
+- Se crea un grupo de seguridad asociado a la VPC del laboratorio, con una regla de entrada de tipo HTTP (TCP puerto 80), origen `0.0.0.0/0` (cualquier IP del mundo). Por defecto, un grupo de seguridad nuevo no trae ninguna regla de entrada (bloquea todo) y sí trae una regla de salida que permite todo el tráfico saliente.
+- Crear la regla no habilita nada por sí sola hasta que el grupo de seguridad se asocie a un recurso real.
+
+**5. Lanzar la instancia EC2:**
+- Se elige una imagen (AMI) Linux (por ejemplo, Amazon Linux) y un tipo de instancia pequeño (de la familia de uso general, por ejemplo `t3.micro`, con 2 vCPU y 1 GB de RAM), suficiente para un laboratorio.
+- Se genera (o reutiliza) un **par de claves** (*key pair*): el mecanismo de acceso a una instancia Linux en vez de usuario/contraseña. AWS entrega la clave privada una única vez, en el momento de crearla — no se puede volver a descargar después; si se pierde ese archivo, se pierde el método de acceso original a esa instancia por SSH.
+- Se elige la subred **pública** de la VPC, y se habilita la asignación automática de IP pública — si se desactiva esa opción, la instancia no es alcanzable desde afuera aunque esté en una subred pública.
+- Se asocia el grupo de seguridad creado en el paso anterior.
+- En "datos de usuario" (*user data*) se agrega un script que se ejecuta una única vez, al arrancar la instancia por primera vez — en este caso, un script que instala y arranca un servidor web básico. Es el equivalente, salvando las distancias, a un script de arranque automático de una máquina.
+
+**6. Verificar y acceder:**
+- Antes de estar lista, la instancia pasa por dos verificaciones de estado (system status check + instance status check) — hasta que ambas están en verde, la instancia no está completamente operativa.
+- Una vez arriba, se copia la dirección DNS pública (o la IP pública) de la instancia y se accede por navegador con `http://` (no `https://`, ya que no hay certificado configurado). Se ve la página del servidor web recién instalado.
+- Detener (*stop*) la instancia libera su IP pública automática; al volver a iniciarla, recibe una **IP pública nueva y distinta** (a diferencia de una IP elástica, que sí se mantiene fija). La IP privada, en cambio, no cambia al detener/iniciar.
+- Si en este mismo ejercicio la instancia se hubiera lanzado en la subred **privada**, no sería alcanzable directamente desde internet — haría falta otro mecanismo (por ejemplo, un balanceador de carga o un bastion host) para acceder a ella desde afuera.
+
+**Notas al margen del laboratorio:**
+- Para agregar HTTPS a esta misma instancia haría falta habilitar el puerto 443 en el grupo de seguridad y un certificado SSL/TLS (por ejemplo, emitido por AWS Certificate Manager) — pero requiere poder acceder a la instancia (vía SSH, puerto 22) para instalarlo, lo cual exige el par de claves generado al crearla.
+- Los laboratorios efímeros de AWS Academy tienen, al final del módulo, un botón para detener el laboratorio (*end lab*) que borra todos los recursos creados — de lo contrario, se liberan automáticamente al vencer el tiempo asignado.
+
+---
+
+## Unidad 7 — Cómputo
+
+### 1. Máquinas virtuales vs. contenedores
+
+Una **máquina virtual** es una máquina completa corriendo dentro de otra, con su propio sistema operativo, totalmente distinto (o no) del sistema operativo anfitrión, y aislado de él. Es la base de virtualizadores clásicos (VirtualBox, Hyper-V, VMware) usados para levantar un sistema operativo distinto dentro de la propia computadora, o de emuladores de dispositivos móviles.
+
+Un **contenedor**, en cambio, no aísla un sistema operativo completo: aísla una aplicación con sus librerías y dependencias dentro del mismo sistema operativo anfitrión, usando un mecanismo propio de Linux (espacios de ejecución aislados, popularizado por **Docker** como forma práctica de crear y ejecutar contenedores). Frente a una máquina virtual:
+
+| | Máquina virtual | Contenedor |
+|---|---|---|
+| Aislamiento | Sistema operativo completo, propio | Proceso aislado dentro del mismo SO anfitrión |
+| Tiempo de arranque | Minutos (arranca un SO completo) | Segundos |
+| Portabilidad | Pesada — ocupa mucho espacio y recursos | Liviana — una definición empaquetada que corre igual en cualquier lado ("funciona en mi máquina, funciona en cualquier máquina") |
+| Uso típico | Aplicaciones monolíticas grandes que requieren mucho recurso dedicado (por ejemplo, un ERP) | Microservicios, APIs, aplicaciones chicas y atómicas que escalan rápido |
+
+### 2. Servicios de cómputo de AWS
+
+- **Amazon EC2 (Elastic Compute Cloud):** el servicio de máquinas virtuales de AWS, y uno de los primeros y más usados de toda la plataforma — prácticamente cualquier tipo de infraestructura se puede levantar como una instancia EC2 (servidor de archivos, de aplicaciones, de base de datos autoadministrada, etc.). Los demás servicios de cómputo (contenedores, funciones) terminan corriendo, por debajo, sobre esta misma flota de servidores físicos.
+- **Amazon ECS (Elastic Container Service):** servicio propio de AWS para ejecutar contenedores.
+- **Amazon EKS (Elastic Kubernetes Service):** ejecuta Kubernetes dentro de AWS. Tanto ECS como EKS permiten ejecutar contenedores de forma orquestada — escalar hacia arriba o hacia abajo automáticamente según la carga, de forma rápida y eficiente (por ejemplo, una aplicación que normalmente tiene pocos usuarios pero necesita escalar mucho durante un evento puntual).
+- **AWS Fargate:** cómputo para contenedores (sobre ECS o EKS) sin tener que administrar los servidores subyacentes.
+- **AWS Lambda:** cómputo *serverless* basado en funciones. No es un contenedor ni una máquina virtual — es directamente un fragmento de código (una función) sin librerías ni configuración de entorno propia, que se ejecuta cuando algo la invoca y se cobra por el tiempo de ejecución real (del orden de milisegundos). El nombre "sin servidor" es más que nada comercial: sí hay un servidor por detrás, pero el usuario no lo administra ni lo dimensiona. Ejemplo típico: una función disparada al subir una imagen a una carpeta, que la redimensiona y la guarda en otro lugar.
+  - Ventaja principal: se paga solo por lo que efectivamente se ejecuta (si no hay invocaciones, no hay costo) y escala automáticamente sin que el usuario configure nada — Amazon administra cuántas veces y dónde corre cada invocación.
+  - Limitación conocida: tiene un tiempo de "arranque en frío" (*cold start*, del orden de 150-200 ms) cuando la función no se invocó recientemente; para funciones que necesitan responder muy rápido y con baja frecuencia de uso, ese arranque puede ser un problema (existe la opción de mantenerlas "precalentadas" a cambio de un costo algo mayor).
+- **AWS Elastic Beanstalk:** plataforma que permite desplegar una aplicación (por ejemplo, un proyecto web) indicando solo el repositorio de código, sin configurar manualmente la infraestructura subyacente (por detrás, de todos modos, suele levantar instancias EC2 y una base de datos si hace falta). Es un servicio con antigüedad considerable dentro de AWS y hoy con adopción decreciente frente a alternativas más modernas, aunque sigue en uso en implementaciones existentes.
+- **AWS Amplify:** alternativa más moderna a Elastic Beanstalk, con una filosofía similar a plataformas como Vercel o Render — se conecta un repositorio de código y se encarga del despliegue. Combinado con contenedores para el backend, es una combinación frecuente para desplegar un frontend + backend sin gestionar infraestructura a mano.
+
+### 3. Elegir dónde ejecutar el cómputo
+
+No existe una forma de cómputo "mejor" en términos absolutos — la elección depende del **patrón de uso**: cantidad de usuarios concurrentes, picos de tráfico, previsibilidad de la demanda, y si la aplicación está diseñada como monolito o como microservicios (un monolito, con frontend y backend mezclados en un mismo bloque de código, no se puede separar fácilmente entre distintos servicios de cómputo).
+
+Esta decisión rara vez es aislada de quien diseña la aplicación: quien diseña la infraestructura y quien diseña la arquitectura de software necesitan coordinar, porque el tipo de cómputo elegido puede condicionar decisiones de desarrollo, y viceversa.
+
+### 4. Amazon EC2 en detalle
+
+- Amazon sigue invirtiendo en actualizar el hardware físico (los "fierros") sobre el que corren las instancias EC2, incluyendo el cambio a nuevas generaciones de procesador sin costo adicional para el cliente. Un ejemplo es la incorporación de procesadores con arquitectura ARM (la misma familia de arquitectura que usan los celulares), que AWS llama **Graviton** — más económicos, aunque no todas las aplicaciones/sistemas operativos son compatibles con esa arquitectura.
+- **Sistemas operativos soportados:** una amplia variedad de versiones de Windows y distribuciones de Linux (y, de forma más limitada, macOS). AWS deja de dar soporte oficial a versiones muy antiguas con el tiempo (por ejemplo, versiones muy viejas de Windows Server dejan de estar disponibles para lanzar de forma oficial, aunque una instancia ya en ejecución con esa versión pueda seguir funcionando).
+- **AMI (Amazon Machine Image):** una plantilla de máquina virtual — el punto de partida para lanzar una instancia. Se puede crear una AMI propia (para replicar una configuración) y compartirla con otra cuenta de AWS, o usarla como una especie de backup.
+- **Familias de instancia:** EC2 agrupa sus instancias en familias según para qué están optimizadas — de uso general, optimizadas para cómputo, para memoria, informática acelerada/Machine Learning, almacenamiento, gráficas, entre otras. Cada familia combina un tipo particular de procesador, memoria y almacenamiento primario para cumplir mejor ese propósito puntual. La familia de uso general (identificada con la letra **T**, por ejemplo `t3`) es la más habitual para laboratorios y cargas de trabajo genéricas.
+- **Tamaños dentro de cada familia:** dentro de una misma familia, existen tamaños predefinidos (`micro`, `medium`, `large`, `xlarge`, `2xlarge`, etc.), cada uno con una combinación fija de CPU y RAM (por ejemplo, 2 CPU/4 GB, 4 CPU/8 GB, 8 CPU/16 GB). No se puede pedir una combinación arbitraria de CPU y RAM a la carta — el motivo es que AWS necesita repartir su capacidad física en proporciones estandarizadas, para poder ofrecerla de forma eficiente a todos los clientes sin desperdiciar recursos (si el catálogo permitiera cualquier combinación, sería fácil que la demanda agotara un recurso puntual — por ejemplo la RAM — dejando sobrante de otro, como el procesador, sin poder ofrecerlo a nadie más).
+
+### 5. Escalado horizontal vs. vertical
+
+- **Escalado vertical:** agrandar un recurso existente (más CPU, más RAM al mismo servidor). Es el modelo tradicional de infraestructura propia — requiere comprar hardware más grande.
+- **Escalado horizontal:** agregar más instancias del mismo recurso y repartir la carga entre todas (por ejemplo, con Auto Scaling y un balanceador de carga), en vez de agrandar una sola. Los contenedores son especialmente aptos para este modelo por su rapidez de arranque, pero también se puede aplicar con instancias EC2 completas (más lento de escalar que un contenedor, pero igualmente válido).
+
+La posibilidad de escalar horizontalmente sin comprar hardware propio fue uno de los factores que impulsó la migración de muchas empresas hacia la nube, en lugar de invertir en infraestructura física para crecer verticalmente.
