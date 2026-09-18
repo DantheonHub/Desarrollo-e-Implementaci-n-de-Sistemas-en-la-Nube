@@ -87,6 +87,12 @@ Apuntes de referencia de la materia **Desarrollo e Implementación de Sistemas e
     - [3. Elegir dónde ejecutar el cómputo](#3-elegir-dónde-ejecutar-el-cómputo)
     - [4. Amazon EC2 en detalle](#4-amazon-ec2-en-detalle)
     - [5. Escalado horizontal vs. vertical](#5-escalado-horizontal-vs-vertical)
+    - [6. Ciclo de vida de una instancia EC2](#6-ciclo-de-vida-de-una-instancia-ec2)
+    - [7. Rol de la instancia](#7-rol-de-la-instancia)
+    - [8. Monitoreo: Amazon CloudWatch](#8-monitoreo-amazon-cloudwatch)
+    - [9. AWS Lambda en detalle](#9-aws-lambda-en-detalle)
+    - [10. AWS Elastic Beanstalk](#10-aws-elastic-beanstalk)
+    - [11. AWS Amplify](#11-aws-amplify)
 
 ---
 
@@ -756,3 +762,65 @@ Esta decisión rara vez es aislada de quien diseña la aplicación: quien diseñ
 - **Escalado horizontal:** agregar más instancias del mismo recurso y repartir la carga entre todas (por ejemplo, con Auto Scaling y un balanceador de carga), en vez de agrandar una sola. Los contenedores son especialmente aptos para este modelo por su rapidez de arranque, pero también se puede aplicar con instancias EC2 completas (más lento de escalar que un contenedor, pero igualmente válido).
 
 La posibilidad de escalar horizontalmente sin comprar hardware propio fue uno de los factores que impulsó la migración de muchas empresas hacia la nube, en lugar de invertir en infraestructura física para crecer verticalmente.
+
+### 6. Ciclo de vida de una instancia EC2
+
+Una instancia parte siempre de una AMI y transita por una serie de estados:
+
+- **Pendiente (*pending*):** la instancia se está aprovisionando, todavía no está lista.
+- **En ejecución (*running*):** operativa.
+- **Deteniéndose / detenida (*stopping* / *stopped*):** equivalente a apagar la máquina. No se pierden los datos del disco, pero si la instancia tenía una IP pública automática (no elástica), esa IP se libera y al volver a iniciarla recibe una nueva. La IP privada, en cambio, no cambia.
+- **Hibernada:** vuelca el contenido completo de la memoria RAM a un archivo en disco, para poder restaurarlo tal cual estaba al reactivar la instancia — el mismo mecanismo de hibernación de una notebook. No todas las instancias lo soportan (depende del sistema operativo y de un límite de RAM, del orden de 150 GB), y no es un mecanismo de uso frecuente.
+- **Reiniciando (*rebooting*):** equivalente a un reinicio de sistema operativo — no libera la IP pública, a diferencia de detener y volver a iniciar.
+- **Terminada (*terminated*):** el único estado no recuperable. Terminar una instancia no es apagarla — es eliminarla: se pierde la instancia, su configuración, y en la gran mayoría de los casos también los datos de su disco (salvo que se haya configurado explícitamente que el volumen persista tras la terminación).
+- **Apagado forzado:** cuando una instancia queda trabada en un estado intermedio (por ejemplo, atascada en "deteniéndose"), existe la opción de forzar el apagado. Es un procedimiento de última instancia: al ser un corte abrupto, existe riesgo de corromper el disco, igual que un corte de luz repentino en una computadora física.
+
+### 7. Rol de la instancia
+
+El **rol de una instancia** es un conjunto de permisos y políticas de IAM asociado directamente a la instancia (ver también [Unidad 5, sección 2](#2-aws-iam-identity-and-access-management)), que le permite interactuar con otros servicios de AWS sin necesidad de guardar credenciales (usuario/contraseña o claves de acceso) dentro del código que corre en ella.
+
+- Es obligatorio que toda instancia tenga un rol asociado, aunque puede agregarse después de lanzada (no hace falta que nazca con uno). Cambiar el rol de una instancia que ya está corriendo puede requerir reiniciarla, porque algunas verificaciones del sistema operativo leen ese rol solo al arrancar.
+- Una instancia solo puede tener un rol, pero ese rol puede agrupar muchas políticas distintas.
+- Buena práctica: acotar el rol a los permisos mínimos necesarios (por ejemplo, "puede leer archivos de un bucket S3 puntual") en vez de otorgar permisos amplios de entrada ("administrador total") solo para simplificar. Si el rol se revoca o se le quitan permisos, la instancia pierde de inmediato esa capacidad, sin haber comprometido ninguna credencial.
+
+### 8. Monitoreo: Amazon CloudWatch
+
+**CloudWatch** es el servicio nativo de AWS para monitorear instancias y, en general, cualquier recurso de la plataforma. Sin necesidad de configuración adicional, ya incluye métricas básicas sin costo extra (por ejemplo, uso de CPU, actividad de disco, tráfico de red), tomadas con una frecuencia estándar (cada 5 minutos); una frecuencia más fina tiene un costo mensual adicional. Métricas más específicas (por ejemplo, uso real de memoria de una aplicación) requieren instalar un agente adicional dentro de la instancia.
+
+Además de métricas, CloudWatch centraliza **logs** de aplicaciones (*CloudWatch Logs*): una aplicación que corre dentro de una instancia puede configurarse para enviar sus registros a este servicio en vez de (o además de) guardarlos localmente. Esto permite revisar qué pasó dentro de una instancia sin tener que entrar a ella — útil, por ejemplo, cuando una instancia se cuelga o falla y hay que reconstruir qué ocurrió a partir del registro conservado en CloudWatch.
+
+### 9. AWS Lambda en detalle
+
+Retomando la introducción de la [sección 2](#2-servicios-de-cómputo-de-aws): una función Lambda es un fragmento de código aislado, sin librerías ni configuración de entorno propia más allá de elegir el lenguaje/runtime, que permanece inactivo (no consume cómputo ni genera costo) hasta que algo la invoca.
+
+**Lenguajes soportados:** Python, Java, Node.js/JavaScript, .NET/C#, Ruby, Go, entre otros — no todos los lenguajes tienen soporte nativo (por ejemplo, PHP y Rust no lo tienen de forma directa, aunque existen mecanismos para ejecutarlos vía contenedores personalizados dentro de Lambda).
+
+**Puntos de entrada (*triggers*):** una función Lambda no hace nada por sí sola hasta que algo la invoca. Los disparadores más comunes:
+- Una **URL HTTP** expuesta directamente, o un conjunto de rutas gestionadas a través de **API Gateway** (un servicio que actúa como puerta de entrada, mapeando rutas y métodos HTTP a distintas funciones Lambda — el mismo concepto que cumple un router como Express dentro de una aplicación Node, pero a nivel de infraestructura).
+- Un evento de otro servicio de AWS: por ejemplo, que se suba un archivo a un bucket de Amazon S3 (caso de uso clásico: redimensionar automáticamente una imagen recién subida), o que se inserte/actualice un registro en una base de datos Amazon DynamoDB.
+- Un evento programado por horario (por ejemplo, para apagar instancias EC2 fuera de horario laboral y volver a encenderlas al día siguiente — una práctica de optimización de costos, ya que AWS cobra por el tiempo que una instancia está encendida, la use alguien o no).
+- Otra función Lambda puede invocar o encadenar más funciones Lambda entre sí (con el riesgo de que la cadena de disparadores se vuelva difícil de rastrear si no se documenta).
+
+**Comportamiento de facturación y escalado:**
+- Se cobra por cantidad de invocaciones y por el tiempo de cómputo real (en milisegundos) de cada una — si nadie invoca la función, no genera costo, más allá de una capa gratuita amplia (del orden del millón de invocaciones mensuales).
+- Cada invocación se procesa en un entorno de ejecución aislado — la función puede atender muchas invocaciones concurrentes sin que el usuario configure nada, dentro de un límite de concurrencia por cuenta (ampliable pidiéndolo a soporte).
+- Existe un tiempo de arranque en frío (*cold start*, de entre 150 y 200 ms) la primera vez que se invoca una función tras un período de inactividad; invocaciones subsiguientes, mientras el entorno se mantiene "caliente" en memoria, son más rápidas y por ende más baratas de facturar. Existe la opción de mantener una función precalentada permanentemente a cambio de un costo adicional.
+- Aislamiento: la ejecución de una función Lambda de una cuenta nunca es visible ni accesible desde la ejecución de otra cuenta.
+
+**Límites conocidos** (de referencia, pueden cambiar — verificar documentación vigente): tiempo máximo de ejecución de 15 minutos por invocación (existe una variante para ejecuciones más largas, de hasta 90 minutos, con configuración adicional); memoria configurable hasta 10 GB; almacenamiento temporal de hasta 75 GB.
+
+**Cuándo conviene y cuándo no:**
+- Ideal para: funciones puntuales y atómicas (una entrada, un procesamiento, una salida) — APIs que consultan y devuelven datos de una base de datos, procesamiento de archivos al subirlos, automatizaciones programadas, validaciones o autenticaciones puntuales.
+- No es un buen candidato para: aplicaciones monolíticas grandes y ya existentes (no partidas en funciones), procesos que requieran más de 15/90 minutos de ejecución continua, o sistemas con una cantidad muy alta de funciones individuales (varios cientos), donde administrar cada una manualmente se vuelve poco práctico — para esos casos existen frameworks de despliegue que automatizan la definición y publicación de cada función a partir del código fuente, en vez de cargarlas una por una manualmente.
+
+### 10. AWS Elastic Beanstalk
+
+Servicio que administra de forma más automatizada el aprovisionamiento de instancias, balanceo de carga, monitoreo y escalado de una aplicación: el usuario sube su código (Java, PHP, Node.js, Python, Ruby, Go, o un contenedor Docker) y AWS se encarga de todo lo demás — servidor de aplicaciones, runtime, sistema operativo y host subyacente.
+
+Está orientado a aplicaciones **monolíticas** (frontend y backend mezclados en un mismo código, un patrón común en frameworks como PHP o Java tradicional) y a organizaciones que prefieren no administrar manualmente instancias, grupos de seguridad ni configuración de red. Es un servicio con adopción decreciente frente a alternativas más modernas (Amplify, o plataformas equivalentes fuera de AWS como Render o Vercel), aunque sigue en uso en implementaciones existentes.
+
+### 11. AWS Amplify
+
+Servicio pensado principalmente para desplegar **frontends** (aunque admite agregar recursos de backend) conectando directamente un repositorio de código (GitHub, Bitbucket, GitLab, o subida manual de un ZIP). Con cada cambio en la rama configurada, Amplify dispara automáticamente el proceso de compilación (*build*) y despliegue, sin que el usuario tenga que compilar en su propia máquina ni configurar servidor, certificado o dominio manualmente — provee un dominio propio con certificado HTTPS incluido, o permite conectar un dominio personalizado.
+
+Es funcionalmente comparable a plataformas como Vercel, Netlify o Render, con la diferencia de que todo el proceso (código, build y hosting) queda dentro del ecosistema de AWS — una ventaja relevante cuando una organización prefiere no que sus datos o su proceso de despliegue dependan de servicios de terceros fuera de la nube contratada.
