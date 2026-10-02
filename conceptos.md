@@ -66,6 +66,9 @@ Apuntes de referencia de la materia **Desarrollo e Implementación de Sistemas e
       - [3.1 Cifrado en reposo](#31-cifrado-en-reposo)
       - [3.2 Cifrado en tránsito](#32-cifrado-en-tránsito)
     - [4. MFA (autenticación multifactor)](#4-mfa-autenticación-multifactor)
+    - [5. Certificados TLS/SSL y AWS Certificate Manager (ACM)](#5-certificados-tlsssl-y-aws-certificate-manager-acm)
+    - [6. Amazon Cognito](#6-amazon-cognito)
+    - [7. AWS STS (Security Token Service) y credenciales temporales](#7-aws-sts-security-token-service-y-credenciales-temporales)
   - [Unidad 6 — Redes](#unidad-6--redes)
     - [1. Conceptos base de redes](#1-conceptos-base-de-redes)
     - [2. Amazon VPC (Virtual Private Cloud)](#2-amazon-vpc-virtual-private-cloud)
@@ -93,6 +96,10 @@ Apuntes de referencia de la materia **Desarrollo e Implementación de Sistemas e
     - [9. AWS Lambda en detalle](#9-aws-lambda-en-detalle)
     - [10. AWS Elastic Beanstalk](#10-aws-elastic-beanstalk)
     - [11. AWS Amplify](#11-aws-amplify)
+  - [Unidad 8 — Almacenamiento](#unidad-8--almacenamiento)
+    - [1. Amazon EBS (Elastic Block Store)](#1-amazon-ebs-elastic-block-store)
+    - [2. Amazon S3 (Simple Storage Service)](#2-amazon-s3-simple-storage-service)
+    - [3. Amazon EFS (Elastic File System)](#3-amazon-efs-elastic-file-system)
 
 ---
 
@@ -555,6 +562,32 @@ Protege la información **mientras viaja** entre dos puntos (dos servicios de AW
 
 El **MFA** (*Multi-Factor Authentication*) agrega un segundo factor de validación además de usuario y contraseña — típicamente un código rotativo de 6 dígitos que cambia cada ~30 segundos, generado por una app de autenticación (o, menos común, un llavero USB físico). Es responsabilidad del cliente activarlo; AWS insiste en que se configure pero no lo impone de forma obligatoria a nivel técnico. En la práctica se lo trata como un estándar no negociable: una cuenta sin MFA se considera insegura por definición.
 
+### 5. Certificados TLS/SSL y AWS Certificate Manager (ACM)
+
+Retomando el cifrado en tránsito ([sección 3.2](#32-cifrado-en-tránsito)): la capa de transporte segura se habilita mediante certificados, comúnmente llamados "certificados SSL" aunque el protocolo vigente hoy es **TLS** (*Transport Layer Security*, sucesor de SSL). Sin un certificado válido, un navegador bloquea o advierte sobre la conexión, porque cualquiera que intercepte el tráfico en el medio podría leerlo en texto plano.
+
+- **Cadena de certificación:** todo certificado depende de una jerarquía — una entidad certificadora raíz avala a entidades intermedias, que a su vez emiten el certificado final. El dispositivo cliente necesita tener esa cadena de confianza completa y actualizada para validar la conexión. Un sistema operativo muy desactualizado (una Smart TV vieja, un Windows sin actualizar hace años) puede perder la capacidad de conectarse de forma segura a sitios modernos porque sus certificados raíz internos ya vencieron (vencen cada varios años, no con la frecuencia de un certificado final) y nunca se actualizaron.
+- **AWS Certificate Manager (ACM):** servicio que emite certificados TLS **gratuitos**, con renovación automática, para usar exclusivamente dentro de los puntos de entrada de servicios de AWS (por ejemplo, Amazon CloudFront o un balanceador de carga) — no son certificados exportables para instalar en un servidor fuera de AWS. Requiere una validación simple (habitualmente vía DNS). Un certificado comercial equivalente, comprado para un dominio propio, suele tener un costo (del orden de decenas a cientos de dólares al año, según el proveedor); existen alternativas gratuitas fuera de AWS orientadas al mismo fin, con certificados de corta vigencia (meses) y renovación automatizada.
+- **Amazon CloudFront** (ver también [Unidad 4, sección 4](#4-puntos-de-presencia-edge-locations)) resuelve, entre otras cosas, el problema de tener un punto de entrada seguro sin necesidad de un dominio propio: ofrece de entrada una dirección con certificado válido de AWS, detrás de la cual se conecta el origen real (una instancia, un balanceador de carga, etc.).
+
+### 6. Amazon Cognito
+
+**Cognito** es un servicio de identidad totalmente administrado por AWS, pensado para resolver la autenticación y gestión de usuarios de una aplicación propia (no para usuarios internos de una cuenta de AWS — eso es tarea de IAM). Dos funciones centrales:
+
+1. **Proveedor de identidad:** reemplaza (o complementa) el sistema de registro/login propio de una aplicación, sin tener que programarlo ni mantener una base de usuarios a mano.
+2. **Gestión de tokens:** una vez que un usuario se autentica, Cognito emite un **token** que ese usuario adjunta a cada petición siguiente hacia el backend. El backend valida el token en cada petición para confirmar que la acción corresponde a ese usuario puntual, y así evitar que una petición falsificada acceda a datos de otra persona — un requisito básico de seguridad en cualquier arquitectura con frontend y backend separados (incluyendo, como caso más general, un backend único consumido por varios frontends distintos: web, aplicación móvil, escritorio).
+
+Cognito también permite que, con ese mismo token, un usuario autenticado interactúe directamente con otros servicios de AWS (sin pasar por el backend propio), si así se configura.
+
+### 7. AWS STS (Security Token Service) y credenciales temporales
+
+Un principio de seguridad central en AWS: trabajar siempre con **credenciales temporales**, no con credenciales fijas ("duras") de usuario y contraseña o claves de acceso estáticas.
+
+- **AWS STS** es el servicio que emite estas credenciales de corta duración (desde minutos hasta algunas horas). Al vencer, el propio cliente de AWS las renueva automáticamente por detrás, sin intervención manual del usuario — las credenciales viejas quedan inválidas y no son reutilizables.
+- Ventaja de seguridad: si una credencial temporal es interceptada en tránsito, su utilidad para un atacante es mínima, porque vence en poco tiempo.
+- El riesgo real aparece cuando, en vez de usar este mecanismo, se dejan credenciales fijas escritas directamente en el código fuente (*hardcodeadas*) — una mala práctica con consecuencias potencialmente graves: desde el uso indebido silencioso de recursos (alguien aprovecha una credencial filtrada para levantar recursos a cuenta ajena, sin que se note hasta la factura) hasta el borrado completo de datos e infraestructura (incluyendo pedidos de rescate tipo ransomware, sin garantía de recuperación aunque se pague). Una credencial de administrador filtrada y hardcodeada puede, en el peor caso, comprometer una cuenta completa; si está asociada al usuario raíz de la cuenta, la recuperación puede requerir un proceso de verificación manual directamente con AWS, con la consecuente interrupción del servicio mientras se resuelve.
+- Buena práctica derivada: evitar en lo posible el uso de credenciales fijas de usuario, preferir roles (ver [Unidad 7, sección 7](#7-rol-de-la-instancia)) y mecanismos de token con vencimiento, tanto para servicios internos de AWS como para la autenticación de usuarios de una aplicación (Cognito).
+
 ---
 
 ## Unidad 6 — Redes
@@ -824,3 +857,44 @@ Está orientado a aplicaciones **monolíticas** (frontend y backend mezclados en
 Servicio pensado principalmente para desplegar **frontends** (aunque admite agregar recursos de backend) conectando directamente un repositorio de código (GitHub, Bitbucket, GitLab, o subida manual de un ZIP). Con cada cambio en la rama configurada, Amplify dispara automáticamente el proceso de compilación (*build*) y despliegue, sin que el usuario tenga que compilar en su propia máquina ni configurar servidor, certificado o dominio manualmente — provee un dominio propio con certificado HTTPS incluido, o permite conectar un dominio personalizado.
 
 Es funcionalmente comparable a plataformas como Vercel, Netlify o Render, con la diferencia de que todo el proceso (código, build y hosting) queda dentro del ecosistema de AWS — una ventaja relevante cuando una organización prefiere no que sus datos o su proceso de despliegue dependan de servicios de terceros fuera de la nube contratada.
+
+---
+
+## Unidad 8 — Almacenamiento
+
+### 1. Amazon EBS (Elastic Block Store)
+
+**EBS** es el servicio de almacenamiento en bloques de AWS, y el más directamente asociado al cómputo: es el disco que usa cualquier instancia EC2 como almacenamiento principal (volumen raíz). Divide la información en bloques, sin importar su estructura lógica — ese diseño es lo que permite redimensionar, copiar y respaldar volúmenes de forma rápida.
+
+- **Volumen:** el equivalente a un disco rígido físico, pero aprovisionado bajo demanda. Se elige su tamaño y tipo al crearlo, y se puede agrandar en caliente, sin tener que migrar datos manualmente a un disco nuevo (a diferencia de reemplazar un disco físico real).
+- **Tipos de volumen:** desde disco mecánico tradicional (más barato, más lento, pensado para grandes volúmenes donde importa más la capacidad que la velocidad) hasta distintos niveles de disco de estado sólido (SSD), incluyendo variantes optimizadas para cargas de trabajo muy exigentes (por ejemplo, entrenamiento de modelos de IA). Por defecto, la gran mayoría de instancias se lanzan hoy con SSD.
+- **Rendimiento (IOPS):** la capacidad de lectura/escritura de un volumen no es igual en cualquier instancia — el tipo de instancia condiciona cuánto rendimiento real puede aprovecharse del disco, porque el canal de conexión entre ambos está dimensionado para eso. Algunos tipos de volumen ofrecen ráfagas de rendimiento adicional por tiempo limitado, útiles para cargas de trabajo con picos puntuales de actividad.
+- **Cifrado:** los volúmenes EBS pueden cifrarse (muchas veces ya viene activado por defecto). Si alguien accediera físicamente a un disco en un centro de datos de AWS, no podría leer su contenido sin la clave de descifrado — el mismo principio que BitLocker en Windows.
+- **Instantáneas (*snapshots*) y backups:** al trabajar por bloques, EBS permite sacar instantáneas incrementales de un volumen de forma rápida y barata — solo se respalda lo que cambió desde la instantánea anterior. Esto simplifica mucho tener una estrategia de copias de seguridad real, algo que en infraestructura tradicional suele quedar resuelto de forma más artesanal (backups poco frecuentes, retención corta por limitaciones de espacio).
+- **Facturación:** se cobra por la cantidad de GB **aprovisionados** en el mes, independientemente de si la instancia a la que está asociado el volumen está encendida, apagada, o incluso si el volumen no está asociado a ninguna instancia. Un volumen huérfano (sin instancia asociada) sigue generando costo mientras exista — un caso frecuente de facturación inesperada en cuentas con mucho tiempo de uso.
+
+### 2. Amazon S3 (Simple Storage Service)
+
+**S3** es el servicio de almacenamiento de objetos de AWS, uno de los primeros y más usados de toda la plataforma. A diferencia de EBS (que es el disco de una instancia puntual), S3 es un almacenamiento independiente de cualquier cómputo, pensado para guardar archivos (objetos) de cualquier tipo: imágenes, videos, documentos, backups, y también datos más estructurados en implementaciones más recientes del servicio (tablas, datos vectoriales para IA, entre otros usos extendidos).
+
+- **Bucket:** el contenedor de nivel superior en S3 (su nombre informal es "balde", por la lógica de "tirar todo adentro"). Dentro de un bucket no existe una jerarquía real de carpetas como en un sistema de archivos tradicional (FAT, NTFS, ext4): cada objeto se guarda con un **prefijo** que simula una ruta (por ejemplo, `fotos/imagen1.jpg`), pero todos los objetos del bucket están, en el fondo, al mismo nivel. Esa estructura más simple es parte de lo que permite que el almacenamiento en S3 sea barato.
+- **Durabilidad:** S3 ofrece una durabilidad de referencia del 99,999999999% (once nueves) gracias a la replicación distribuida y redundante de los datos — la probabilidad de perder un objeto es extremadamente baja.
+- **Clases de almacenamiento (*storage classes*):** S3 ofrece distintos niveles de costo según qué tan frecuente es el acceso esperado a los datos, de más caliente (acceso inmediato, más caro) a más frío (acceso demorado, mucho más barato):
+  - **Estándar:** acceso inmediato, el costo de referencia más alto de los niveles "calientes" (del orden de centésimas de dólar por GB al mes).
+  - **Acceso inteligente (*Intelligent-Tiering*):** mueve automáticamente los objetos entre capas más calientes o más frías según su patrón real de acceso, sin intervención manual.
+  - **Acceso poco frecuente (*Infrequent Access*):** más barato que el estándar, con una pequeña demora o costo adicional al recuperar un objeto.
+  - **Una sola zona de disponibilidad (*One Zone-IA*):** aún más barato, pero sin la redundancia entre zonas de disponibilidad del nivel estándar — si la única zona donde está guardado el dato se cae, el acceso se interrumpe hasta que se recupere.
+  - **Glacier y Glacier Deep Archive:** los niveles más fríos y más baratos (fracciones de centavo de dólar por GB al mes), pensados para datos que deben conservarse por obligación contractual o regulatoria durante años, sin necesidad de acceso inmediato. La recuperación de un objeto desde estos niveles no es instantánea (puede demorar horas) y tiene un costo adicional significativo por recuperación — el equivalente moderno a un archivo histórico guardado en cinta magnética.
+  - Es posible automatizar el paso de objetos entre clases de almacenamiento mediante reglas de ciclo de vida (por ejemplo, "mover a una capa más fría todo archivo de más de 60 días sin acceso").
+- **Acceso público y hosting estático:** un objeto de S3 puede exponerse con una URL pública (habilitando las políticas correspondientes del bucket), lo que permite usar S3 como origen de contenido estático para un sitio web (imágenes, videos) o incluso alojar directamente una página estática completa (HTML/CSS/JS) sin necesidad de un servidor dedicado.
+- **Formas de acceso:** consola web de AWS, línea de comandos (CLI) para sincronizar carpetas enteras, y SDK para integrarlo directamente desde código de aplicación (la forma de acceso que popularizó su adopción masiva entre desarrolladores: guardar y leer archivos de una aplicación sin depender del disco local de una instancia, lo cual además permite que la aplicación escale horizontalmente sin preocuparse por sincronizar archivos entre instancias). S3 también expone una API REST estándar, tan extendida que otros proveedores (incluidas nubes distintas a AWS) y herramientas on-premise ofrecen compatibilidad total con esa misma API.
+- **Facturación:** se cobra por GB almacenado, por ciertas operaciones (lectura/escritura/listado), y por transferencia de datos saliente hacia fuera de la región. No se cobra la transferencia entrante, ni la transferencia entre un bucket de S3 y otros recursos (por ejemplo, una instancia EC2) dentro de la misma región — sí se cobra si ese tráfico cruza de una región a otra.
+
+### 3. Amazon EFS (Elastic File System)
+
+**EFS** es un sistema de archivos de red, compatible con el protocolo estándar **NFS** (*Network File System*), ampliamente usado en sistemas operativos tipo Unix/Linux. A diferencia de S3 (al que se accede por API/SDK) o de EBS (un disco atado a una única instancia), EFS se monta como una ruta nativa del sistema operativo (por ejemplo, `/mnt/datos`) y puede ser leído y escrito **simultáneamente por varias instancias a la vez** — el equivalente, salvando las distancias, a una carpeta compartida de red en un entorno Windows (protocolo SMB).
+
+- Cada zona de disponibilidad de una región obtiene su propia interfaz de red hacia el mismo sistema de archivos, de forma que una instancia siempre se conecta al punto de montaje de su propia zona (o la más cercana disponible), minimizando la latencia.
+- Usa los mismos permisos y estructura de carpetas estándar de Linux.
+- Es más caro que S3, pero resuelve un caso de uso distinto: cuando varias instancias (por ejemplo, un grupo de servidores escalado horizontalmente) necesitan compartir el mismo conjunto de archivos en tiempo real, de forma nativa al sistema operativo, sin pasar por una API. Casos de uso típicos: Big Data, análisis de datos, servidores web con contenido compartido.
+- Existe una variante más reciente, S3 File System, que permite montar un bucket de S3 como si fuera un sistema de archivos local (requiere un controlador adicional), aunque no es un reemplazo completo de la compatibilidad nativa que ofrece EFS.

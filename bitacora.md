@@ -35,3 +35,9 @@ Una línea por clase real, en el orden en que se dictaron. El detalle técnico d
   - **Actividades asignadas:** avanzar con AWS Academy hasta el módulo 6 (inclusive, hasta donde cubre Lambda) — son solo lectura y preguntas, sin laboratorio nuevo en ese tramo. El Laboratorio 3 (módulo 7, EC2 con modificación de tamaño de disco) ya puede resolverse de forma independiente, es similar al Laboratorio 2 ya hecho.
 
   > **Logística:** se armó una planilla compartida para coordinar los grupos del trabajo práctico integrador; quienes ya tienen grupo en Backend/Frontend deberían mantener el mismo grupo en esta materia (se decide una vez que esas materias definan los suyos). Fechas de entrega mencionadas: primera entrega a mediados/fines de octubre (modalidad virtual o presencial a definir por votación), entrega final en noviembre, presencial.
+
+* **Clase 7 — Redes seguras (cierre de Unidad 5) + Almacenamiento (Unidad 8)**
+  - **Contenido:** cierre de redes seguras: certificados TLS/SSL y cadena de certificación, AWS Certificate Manager, Amazon Cognito (proveedor de identidad y tokens para separar frontend/backend/mobile), AWS STS y credenciales temporales (con un caso real de incidente de seguridad por credenciales hardcodeadas con permisos de administrador). Segunda mitad: Unidad 8 completa — Amazon EBS (volúmenes, tipos de disco, rendimiento, cifrado, snapshots, facturación por aprovisionamiento), Amazon S3 (buckets, clases de almacenamiento de más caliente a más fría, durabilidad, hosting estático, SDK/API, facturación), y Amazon EFS (sistema de archivos compartido compatible con NFS).
+  - **Actividades asignadas:** sin laboratorio nuevo asignado explícitamente esta clase.
+
+  > **Logística:** mención de que AWS lanzó un plan gratuito nuevo (USD 100 + posible extensión a USD 100 más) para cuentas personales fuera del entorno de laboratorio de la cursada, por si alguien quiere seguir practicando con cuenta propia.
